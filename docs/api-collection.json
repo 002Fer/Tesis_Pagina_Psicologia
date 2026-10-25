@@ -1,0 +1,121 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "Plataforma Psicología API",
+  "dateExported": "2026-10-25",
+  "version": "1.1",
+  "folders": [
+    { "_id": "f_auth", "name": "1. Autenticación" },
+    { "_id": "f_profesionales", "name": "2. Profesionales y Disponibilidad" },
+    { "_id": "f_pacientes", "name": "3. Pacientes y Solicitudes" },
+    { "_id": "f_espacios", "name": "4. Espacios" },
+    { "_id": "f_citas", "name": "5. Citas y Conflictos" },
+    { "_id": "f_seguimiento", "name": "6. Seguimiento y Frecuencias" },
+    { "_id": "f_asistencias", "name": "7. Asistencias" },
+    { "_id": "f_reportes", "name": "8. Reportes y Dashboard" }
+  ],
+  "requests": [
+    {
+      "name": "Healthcheck",
+      "method": "GET",
+      "url": "http://localhost:3001/api/health"
+    },
+    {
+      "containerId": "f_auth",
+      "name": "Login Admin",
+      "method": "POST",
+      "url": "http://localhost:3001/api/auth/login",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"correo\": \"admin@clinica.com\",\n  \"password\": \"Admin123*\"\n}"
+      }
+    },
+    {
+      "containerId": "f_auth",
+      "name": "Login Profesional",
+      "method": "POST",
+      "url": "http://localhost:3001/api/auth/login",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"correo\": \"profesional@clinica.com\",\n  \"password\": \"Profe123*\"\n}"
+      }
+    },
+    {
+      "containerId": "f_auth",
+      "name": "Login Paciente",
+      "method": "POST",
+      "url": "http://localhost:3001/api/auth/login",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"correo\": \"paciente@gmail.com\",\n  \"password\": \"Paciente123*\"\n}"
+      }
+    },
+    {
+      "containerId": "f_auth",
+      "name": "Registro de Paciente (Autoservicio)",
+      "method": "POST",
+      "url": "http://localhost:3001/api/auth/register",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"correo\": \"mariana.lopez@gmail.com\",\n  \"password\": \"Mariana123*\",\n  \"nombres\": \"Mariana\",\n  \"apellidos\": \"López Silva\",\n  \"fecha_nacimiento\": \"1996-08-20\",\n  \"telefono\": \"555-9876\"\n}"
+      }
+    },
+    {
+      "containerId": "f_profesionales",
+      "name": "Listar Profesionales",
+      "method": "GET",
+      "url": "http://localhost:3001/api/profesionales"
+    },
+    {
+      "containerId": "f_profesionales",
+      "name": "Consultar Horarios Libres por Fecha",
+      "method": "GET",
+      "url": "http://localhost:3001/api/profesionales/1/horarios-libres?fecha=2026-10-26"
+    },
+    {
+      "containerId": "f_citas",
+      "name": "Crear Cita Inicial",
+      "method": "POST",
+      "url": "http://localhost:3001/api/citas",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"id_paciente\": 1,\n  \"id_profesional\": 1,\n  \"fecha_hora_inicio\": \"2026-10-26T09:00:00.000Z\",\n  \"fecha_hora_fin\": \"2026-10-26T10:00:00.000Z\",\n  \"tipo\": \"INICIAL\"\n}"
+      }
+    },
+    {
+      "containerId": "f_citas",
+      "name": "Probar Detección de Conflicto (Mismo Horario)",
+      "method": "POST",
+      "url": "http://localhost:3001/api/citas",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"id_paciente\": 1,\n  \"id_profesional\": 1,\n  \"fecha_hora_inicio\": \"2026-10-26T09:30:00.000Z\",\n  \"fecha_hora_fin\": \"2026-10-26T10:30:00.000Z\",\n  \"tipo\": \"INICIAL\"\n}"
+      }
+    },
+    {
+      "containerId": "f_asistencias",
+      "name": "Registrar Asistencia Cita",
+      "method": "POST",
+      "url": "http://localhost:3001/api/asistencias",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"id_cita\": 1,\n  \"estado\": \"ASISTIO\"\n}"
+      }
+    },
+    {
+      "containerId": "f_seguimiento",
+      "name": "Crear Plan de Seguimiento con Frecuencia",
+      "method": "POST",
+      "url": "http://localhost:3001/api/seguimientos/planes",
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"id_vinculacion\": 1,\n  \"frecuencia\": \"SEMANAL\",\n  \"horarios\": [\n    {\n      \"dia_semana\": 1,\n      \"hora_inicio\": \"09:00:00\",\n      \"duracion_minutos\": 60\n    }\n  ]\n}"
+      }
+    },
+    {
+      "containerId": "f_reportes",
+      "name": "Dashboard Resumen",
+      "method": "GET",
+      "url": "http://localhost:3001/api/reportes/dashboard"
+    }
+  ]
+}

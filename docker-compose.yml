@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: psicologia_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-psicologia_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres123}
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - psicologia_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/seeds.sql:/docker-entrypoint-initdb.d/02_seeds.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d psicologia_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  psicologia_data:
