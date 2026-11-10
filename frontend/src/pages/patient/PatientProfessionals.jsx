@@ -98,6 +98,7 @@ export const PatientProfessionals = () => {
         setConfirmModalOpen(false);
         setNotification({
           type: 'success',
+          title: 'Cita creada',
           message: `¡Cita programada con éxito para el ${selectedSlot.fecha} de ${selectedSlot.hora_inicio} a ${selectedSlot.hora_fin}!`,
         });
         // Refrescar slots disponibles
@@ -106,6 +107,7 @@ export const PatientProfessionals = () => {
     } catch (err) {
       setNotification({
         type: 'error',
+        title: 'Conflicto de Horario',
         message: err.message || 'Hubo un conflicto con el horario seleccionado. Por favor intente con otro horario.',
       });
     } finally {
@@ -118,8 +120,8 @@ export const PatientProfessionals = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-800">Profesionales y Disponibilidad de Citas</h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Profesionales y Disponibilidad de Citas</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Selecciona un profesional de salud psicológica y consulta los horarios libres para agendar tu cita inicial.
         </p>
       </div>
@@ -128,7 +130,8 @@ export const PatientProfessionals = () => {
         <Alert
           type={notification.type}
           onClose={() => setNotification(null)}
-          title={notification.type === 'success' ? 'Operación Exitosa' : 'Aviso'}
+          autoClose={5000}
+          title={notification.title || (notification.type === 'success' ? 'Cita creada' : 'Aviso')}
         >
           {notification.message}
         </Alert>

@@ -16,10 +16,10 @@ export const Button = ({
 
   const variants = {
     primary: 'bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500',
-    secondary: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 focus:ring-slate-400',
+    secondary: 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 focus:ring-slate-400',
     danger: 'bg-rose-600 hover:bg-rose-700 text-white focus:ring-rose-500',
     success: 'bg-emerald-600 hover:bg-emerald-700 text-white focus:ring-emerald-500',
-    ghost: 'bg-transparent hover:bg-slate-100 text-slate-600 shadow-none focus:ring-slate-300',
+    ghost: 'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-none focus:ring-slate-300',
   };
 
   const sizes = {

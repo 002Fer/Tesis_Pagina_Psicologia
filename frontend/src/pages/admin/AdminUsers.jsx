@@ -10,6 +10,8 @@ import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
+import PasswordRequirements from '../../components/common/PasswordRequirements';
+import { validatePassword } from '../../utils/password.utils';
 
 export const AdminUsers = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -81,9 +83,16 @@ export const AdminUsers = () => {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
+    setNotification(null);
+
+    const val = validatePassword(formData.password);
+    if (!val.isValid) {
+      setNotification({ type: 'error', message: val.errorMessage });
+      return;
+    }
+
     try {
       setSaving(true);
-      setNotification(null);
       const res = await authService.register({
         correo: formData.correo,
         password: formData.password,
@@ -224,10 +233,11 @@ export const AdminUsers = () => {
             label="Contraseña"
             type="password"
             required
-            placeholder="Al menos 6 caracteres"
+            placeholder="Mín. 8 caracteres, mayús, núm, símb"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
+          <PasswordRequirements password={formData.password} />
 
           <Select
             id="id_rol"

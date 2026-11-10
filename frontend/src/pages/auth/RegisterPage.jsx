@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { HeartPulse, Mail, Lock, User, Phone, Calendar, UserPlus } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { HeartPulse, Mail, Lock, User, Phone, Calendar, UserPlus, Sun, Moon } from 'lucide-react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import PasswordRequirements from '../../components/common/PasswordRequirements';
+import { validatePassword } from '../../utils/password.utils';
 
 export const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +24,7 @@ export const RegisterPage = () => {
   const [error, setError] = useState(null);
 
   const { register } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,13 +35,14 @@ export const RegisterPage = () => {
     e.preventDefault();
     setError(null);
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Las contraseñas no coinciden.');
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      setError(passwordValidation.errorMessage);
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.');
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden.');
       return;
     }
 
@@ -60,18 +65,28 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 flex items-center justify-center p-4 py-8">
-      <div className="max-w-xl w-full bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 sm:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center p-4 py-8 relative transition-colors duration-200">
+      {/* Botón modo oscuro en la esquina superior derecha */}
+      <button
+        onClick={toggleTheme}
+        type="button"
+        className="absolute top-6 right-6 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-amber-400 hover:bg-white dark:hover:bg-slate-800 transition-colors shadow-sm"
+        title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      >
+        {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
+
+      <div className="max-w-xl w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 p-8 sm:p-10 transition-colors">
         <div className="text-center mb-8">
           <div className="w-12 h-12 rounded-2xl bg-primary-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-primary-600/30 mb-4">
             <HeartPulse className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">Crea tu cuenta de Paciente</h2>
-          <p className="text-sm text-slate-500 mt-1">Registra tus datos para solicitar atención y gestionar citas</p>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Crea tu cuenta de Paciente</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Registra tus datos para solicitar atención y gestionar citas</p>
         </div>
 
         {error && (
-          <Alert type="error" onClose={() => setError(null)} className="mb-6">
+          <Alert type="error" onClose={() => setError(null)} autoClose={5000} className="mb-6">
             {error}
           </Alert>
         )}
@@ -134,7 +149,7 @@ export const RegisterPage = () => {
               label="Contraseña"
               type="password"
               required
-              placeholder="Al menos 6 caracteres"
+              placeholder="Mín. 8 caracteres, mayús, núm, símb"
               value={formData.password}
               onChange={handleChange}
               icon={Lock}
@@ -151,6 +166,8 @@ export const RegisterPage = () => {
             />
           </div>
 
+          <PasswordRequirements password={formData.password} />
+
           <Button type="submit" loading={loading} className="w-full mt-4" size="lg">
             <UserPlus className="w-4 h-4 mr-1" />
             Completar Registro
@@ -158,9 +175,9 @@ export const RegisterPage = () => {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             ¿Ya tienes una cuenta registrada?{' '}
-            <Link to="/login" className="font-semibold text-primary-600 hover:text-primary-700">
+            <Link to="/login" className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700">
               Inicia sesión aquí
             </Link>
           </p>

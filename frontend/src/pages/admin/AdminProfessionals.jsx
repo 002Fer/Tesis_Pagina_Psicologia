@@ -8,6 +8,8 @@ import Modal from '../../components/common/Modal';
 import Input from '../../components/common/Input';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
+import PasswordRequirements from '../../components/common/PasswordRequirements';
+import { validatePassword } from '../../utils/password.utils';
 
 export const AdminProfessionals = () => {
   const [profesionales, setProfesionales] = useState([]);
@@ -47,9 +49,16 @@ export const AdminProfessionals = () => {
 
   const handleCreateProfessional = async (e) => {
     e.preventDefault();
+    setNotification(null);
+
+    const val = validatePassword(formData.password);
+    if (!val.isValid) {
+      setNotification({ type: 'error', message: val.errorMessage });
+      return;
+    }
+
     try {
       setSaving(true);
-      setNotification(null);
       const res = await professionalService.create(formData);
       if (res.success) {
         setModalOpen(false);
@@ -197,10 +206,11 @@ export const AdminProfessionals = () => {
             label="Contraseña Inicial"
             type="password"
             required
-            placeholder="Al menos 6 caracteres"
+            placeholder="Mín. 8 caracteres, mayús, núm, símb"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
+          <PasswordRequirements password={formData.password} />
 
           <Input
             id="telefono"

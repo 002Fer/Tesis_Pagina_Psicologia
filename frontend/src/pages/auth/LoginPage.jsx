@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { HeartPulse, Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { HeartPulse, Mail, Lock, LogIn, Sun, Moon } from 'lucide-react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
@@ -13,6 +14,7 @@ export const LoginPage = () => {
   const [error, setError] = useState(null);
 
   const { login } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -42,18 +44,28 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 sm:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center p-4 relative transition-colors duration-200">
+      {/* Botón modo oscuro en la esquina superior derecha */}
+      <button
+        onClick={toggleTheme}
+        type="button"
+        className="absolute top-6 right-6 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-amber-400 hover:bg-white dark:hover:bg-slate-800 transition-colors shadow-sm"
+        title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      >
+        {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
+
+      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 p-8 sm:p-10 transition-colors">
         <div className="text-center mb-8">
           <div className="w-12 h-12 rounded-2xl bg-primary-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-primary-600/30 mb-4">
             <HeartPulse className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">Bienvenido de nuevo</h2>
-          <p className="text-sm text-slate-500 mt-1">Plataforma de Gestión de Servicios Psicológicos</p>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Bienvenido de nuevo</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Plataforma de Gestión de Servicios Psicológicos</p>
         </div>
 
         {error && (
-          <Alert type="error" onClose={() => setError(null)} className="mb-6">
+          <Alert type="error" onClose={() => setError(null)} autoClose={5000} className="mb-6">
             {error}
           </Alert>
         )}
@@ -88,38 +100,38 @@ export const LoginPage = () => {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             ¿No tienes una cuenta de paciente?{' '}
-            <Link to="/register" className="font-semibold text-primary-600 hover:text-primary-700">
+            <Link to="/register" className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700">
               Regístrate aquí
             </Link>
           </p>
         </div>
 
         {/* Cuentas de demostración rápida */}
-        <div className="mt-8 pt-6 border-t border-slate-100">
-          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 text-center">
+        <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+          <p className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 text-center">
             Acceso Rápido para Pruebas (Demo)
           </p>
           <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
               onClick={() => handleQuickLogin('admin@clinica.com', 'Admin123*')}
-              className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-600 border border-slate-200 transition-colors"
+              className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
             >
               Admin
             </button>
             <button
               type="button"
               onClick={() => handleQuickLogin('profesional@clinica.com', 'Profe123*')}
-              className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-600 border border-slate-200 transition-colors"
+              className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
             >
               Profesional
             </button>
             <button
               type="button"
               onClick={() => handleQuickLogin('paciente@gmail.com', 'Paciente123*')}
-              className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-600 border border-slate-200 transition-colors"
+              className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
             >
               Paciente
             </button>

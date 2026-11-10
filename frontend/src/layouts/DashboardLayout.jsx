@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import {
   LayoutDashboard,
   Calendar,
@@ -17,10 +18,13 @@ import {
   HeartPulse,
   User,
   Search,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 export const DashboardLayout = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -86,22 +90,22 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex transition-colors duration-200">
       {/* Sidebar Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 shrink-0">
-        <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
+      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shrink-0">
+        <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-800">
           <div className="w-9 h-9 rounded-xl bg-primary-600 flex items-center justify-center text-white shadow-md shadow-primary-500/20">
             <HeartPulse className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-sm font-bold text-slate-800 leading-tight">PsicoGestión</h1>
-            <p className="text-[10px] text-slate-400 font-medium">Servicios Psicológicos</p>
+            <h1 className="text-sm font-bold text-slate-800 dark:text-slate-100 leading-tight">PsicoGestión</h1>
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Servicios Psicológicos</p>
           </div>
         </div>
 
         {/* Navigation Items */}
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
-          <p className="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+          <p className="px-3 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
             Menú Principal
           </p>
           {navLinks.map((item) => {
@@ -114,8 +118,8 @@ export const DashboardLayout = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-primary-50 text-primary-700 font-semibold shadow-sm'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-300 font-semibold shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
                   }`
                 }
               >
@@ -127,19 +131,19 @@ export const DashboardLayout = () => {
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
+        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
           <div className="flex items-center gap-3 px-2 py-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-700 font-bold flex items-center justify-center text-xs">
+            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/60 text-primary-700 dark:text-primary-300 font-bold flex items-center justify-center text-xs">
               {getUserDisplayName().charAt(0)}
             </div>
             <div className="overflow-hidden flex-1">
-              <p className="text-xs font-semibold text-slate-800 truncate">{getUserDisplayName()}</p>
-              <p className="text-[11px] text-slate-400 truncate">{getRoleLabel(user?.rol)}</p>
+              <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{getUserDisplayName()}</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate">{getRoleLabel(user?.rol)}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             Cerrar Sesión
@@ -151,15 +155,15 @@ export const DashboardLayout = () => {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
           <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-          <div className="relative flex flex-col w-72 bg-white h-full shadow-2xl z-10">
-            <div className="h-16 flex items-center justify-between px-6 border-b border-slate-100">
+          <div className="relative flex flex-col w-72 bg-white dark:bg-slate-900 h-full shadow-2xl z-10 border-r border-slate-200 dark:border-slate-800">
+            <div className="h-16 flex items-center justify-between px-6 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white">
                   <HeartPulse className="w-4 h-4" />
                 </div>
-                <span className="font-bold text-sm text-slate-800">PsicoGestión</span>
+                <span className="font-bold text-sm text-slate-800 dark:text-slate-100">PsicoGestión</span>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -176,8 +180,8 @@ export const DashboardLayout = () => {
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-primary-50 text-primary-700 font-semibold'
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                          ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-300 font-semibold'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
                       }`
                     }
                   >
@@ -188,10 +192,10 @@ export const DashboardLayout = () => {
               })}
             </div>
 
-            <div className="p-4 border-t border-slate-100">
+            <div className="p-4 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
               >
                 <LogOut className="w-4 h-4" />
                 Cerrar Sesión
@@ -204,23 +208,33 @@ export const DashboardLayout = () => {
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Navbar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between shrink-0 transition-colors">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100"
+              className="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
               {getRoleLabel(user?.rol)}
             </span>
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Botón de Modo Oscuro / Claro */}
+            <button
+              onClick={toggleTheme}
+              type="button"
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shadow-sm"
+              title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-bold text-slate-800">{getUserDisplayName()}</p>
-              <p className="text-[11px] text-slate-400">{user?.correo}</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{getUserDisplayName()}</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500">{user?.correo}</p>
             </div>
             <div className="w-9 h-9 rounded-full bg-primary-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
               {getUserDisplayName().charAt(0)}
@@ -229,7 +243,7 @@ export const DashboardLayout = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50 dark:bg-slate-950 transition-colors">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
