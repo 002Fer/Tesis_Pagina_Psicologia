@@ -33,7 +33,7 @@ export const Input = ({
           } pr-3 py-2 ${
             error
               ? 'border-rose-300 dark:border-rose-700 text-rose-900 dark:text-rose-200 placeholder-rose-300 bg-rose-50/30 dark:bg-rose-950/20 focus:border-rose-500 focus:ring-rose-500'
-              : 'border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 bg-white dark:bg-slate-900 focus:border-primary-500'
+              : 'border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 bg-white dark:bg-[#0f172a] focus:border-primary-500'
           } ${className}`}
           {...props}
         />

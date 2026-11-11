@@ -44,7 +44,7 @@ export const AdminDashboard = () => {
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold">Panel de Administración y Control</h2>
-          <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl">
+          <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl dark:text-slate-400">
             Supervisión global de servicios psicológicos: gestión de terapeutas, pacientes, espacios clínicos y citas.
           </p>
         </div>
@@ -130,7 +130,7 @@ export const AdminDashboard = () => {
       {/* Accesos Rápidos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card title="Gestión de Pacientes" subtitle="Expedientes y asignación">
-          <p className="text-xs text-slate-500 mb-4">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
             Consulta el padrón completo de solicitantes, pacientes activos y asignaciones administrativas.
           </p>
           <Link to="/admin/pacientes">
@@ -142,7 +142,7 @@ export const AdminDashboard = () => {
         </Card>
 
         <Card title="Equipo de Profesionales" subtitle="Carga clínica y agenda">
-          <p className="text-xs text-slate-500 mb-4">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
             Monitorea la carga de pacientes por profesional y registra nuevos terapeutas al sistema.
           </p>
           <Link to="/admin/profesionales">
@@ -154,7 +154,7 @@ export const AdminDashboard = () => {
         </Card>
 
         <Card title="Espacios de Atención" subtitle="Ocupación física de salas">
-          <p className="text-xs text-slate-500 mb-4">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
             Verifica el uso de consultorios físicos y virtuales para evitar traslapes o conflictos.
           </p>
           <Link to="/admin/espacios">

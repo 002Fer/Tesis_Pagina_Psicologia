@@ -48,8 +48,8 @@ export const AdminReports = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-800">Reportes e Indicadores de Gestión</h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Reportes e Indicadores de Gestión</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Métricas cuantitativas e indicadores administrativos de atención psicológica.
         </p>
       </div>
@@ -95,7 +95,7 @@ export const AdminReports = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold">
+                  <tr className="border-b border-slate-100 dark:border-slate-700/50 text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">
                     <th className="pb-3 px-2">Profesional</th>
                     <th className="pb-3 px-2 text-center">Pacientes Activos</th>
                     <th className="pb-3 px-2 text-center">Total Citas</th>
@@ -103,16 +103,16 @@ export const AdminReports = () => {
                     <th className="pb-3 px-2 text-center">Canceladas</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
                   {profesionalesReport.map((p) => (
-                    <tr key={p.id_profesional} className="hover:bg-slate-50/50">
-                      <td className="py-2.5 px-2 font-bold text-slate-800">
+                    <tr key={p.id_profesional} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                      <td className="py-2.5 px-2 font-bold text-slate-800 dark:text-slate-100">
                         Lic. {p.nombres} {p.apellidos}
                       </td>
-                      <td className="py-2.5 px-2 text-center font-semibold text-primary-700">
+                      <td className="py-2.5 px-2 text-center font-semibold text-primary-700 dark:text-primary-300">
                         {p.pacientes_activos}
                       </td>
-                      <td className="py-2.5 px-2 text-center text-slate-600">{p.total_citas}</td>
+                      <td className="py-2.5 px-2 text-center text-slate-600 dark:text-slate-300">{p.total_citas}</td>
                       <td className="py-2.5 px-2 text-center text-emerald-600 font-semibold">{p.citas_realizadas}</td>
                       <td className="py-2.5 px-2 text-center text-rose-600 font-semibold">{p.citas_canceladas}</td>
                     </tr>
@@ -121,7 +121,7 @@ export const AdminReports = () => {
               </table>
             </div>
           ) : (
-            <p className="text-xs text-slate-400 text-center py-6">Sin registros de carga profesional.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">Sin registros de carga profesional.</p>
           )}
         </Card>
 
@@ -131,19 +131,19 @@ export const AdminReports = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold">
+                  <tr className="border-b border-slate-100 dark:border-slate-700/50 text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">
                     <th className="pb-3 px-2">Espacio / Consultorio</th>
                     <th className="pb-3 px-2">Ubicación</th>
                     <th className="pb-3 px-2 text-center">Citas Asignadas</th>
                     <th className="pb-3 px-2 text-center">Completadas</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
                   {espaciosReport.map((e) => (
-                    <tr key={e.id_espacio} className="hover:bg-slate-50/50">
-                      <td className="py-2.5 px-2 font-bold text-slate-800">{e.nombre}</td>
-                      <td className="py-2.5 px-2 text-slate-500">{e.ubicacion}</td>
-                      <td className="py-2.5 px-2 text-center font-semibold text-primary-700">{e.total_citas_asignadas}</td>
+                    <tr key={e.id_espacio} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                      <td className="py-2.5 px-2 font-bold text-slate-800 dark:text-slate-100">{e.nombre}</td>
+                      <td className="py-2.5 px-2 text-slate-500 dark:text-slate-400">{e.ubicacion}</td>
+                      <td className="py-2.5 px-2 text-center font-semibold text-primary-700 dark:text-primary-300">{e.total_citas_asignadas}</td>
                       <td className="py-2.5 px-2 text-center text-emerald-600 font-semibold">{e.citas_completadas}</td>
                     </tr>
                   ))}
@@ -151,7 +151,7 @@ export const AdminReports = () => {
               </table>
             </div>
           ) : (
-            <p className="text-xs text-slate-400 text-center py-6">Sin registros de uso de espacios.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">Sin registros de uso de espacios.</p>
           )}
         </Card>
       </div>
@@ -162,16 +162,16 @@ export const AdminReports = () => {
           {pacientesReport?.pacientes_por_estado && pacientesReport.pacientes_por_estado.length > 0 ? (
             <div className="space-y-3">
               {pacientesReport.pacientes_por_estado.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="font-semibold text-xs text-slate-700">{item.estado}</span>
-                  <span className="font-bold text-sm text-primary-700 px-3 py-1 bg-white rounded-lg border border-slate-200">
+                <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+                  <span className="font-semibold text-xs text-slate-700 dark:text-slate-200">{item.estado}</span>
+                  <span className="font-bold text-sm text-primary-700 dark:text-primary-300 px-3 py-1 bg-white dark:bg-[#111827] rounded-lg border border-slate-200 dark:border-slate-700/50">
                     {item.total} {item.total === 1 ? 'paciente' : 'pacientes'}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-xs text-slate-400 text-center py-6">Sin datos de pacientes.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">Sin datos de pacientes.</p>
           )}
         </Card>
 
@@ -180,16 +180,16 @@ export const AdminReports = () => {
           {citasReport?.por_estado && citasReport.por_estado.length > 0 ? (
             <div className="space-y-3">
               {citasReport.por_estado.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
                   <Badge status={item.estado}>{item.estado}</Badge>
-                  <span className="font-bold text-sm text-slate-800 px-3 py-1 bg-white rounded-lg border border-slate-200">
+                  <span className="font-bold text-sm text-slate-800 dark:text-slate-100 px-3 py-1 bg-white dark:bg-[#111827] rounded-lg border border-slate-200 dark:border-slate-700/50">
                     {item.total} {item.total === 1 ? 'cita' : 'citas'}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-xs text-slate-400 text-center py-6">Sin datos de citas.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">Sin datos de citas.</p>
           )}
         </Card>
       </div>

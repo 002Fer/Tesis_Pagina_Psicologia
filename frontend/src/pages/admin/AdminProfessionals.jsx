@@ -97,21 +97,21 @@ export const AdminProfessionals = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Equipo de Profesionales</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Equipo de Profesionales</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Administra a los psicólogos y terapeutas habilitados en la plataforma.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="relative w-64">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Buscar profesional..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+              className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
             />
           </div>
           <Button onClick={() => setModalOpen(true)} icon={Plus}>
@@ -130,36 +130,36 @@ export const AdminProfessionals = () => {
         {profesionalesFiltrados.map((prof) => (
           <div
             key={prof.id_profesional}
-            className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+            className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none hover:shadow-md dark:hover:shadow-glow-teal/5 transition-shadow flex flex-col justify-between"
           >
             <div>
               <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="w-11 h-11 rounded-xl bg-primary-100 text-primary-700 font-bold flex items-center justify-center text-sm">
+                <div className="w-11 h-11 rounded-xl bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 font-bold flex items-center justify-center text-sm">
                   {prof.nombres.charAt(0)}
                 </div>
                 <Badge status={prof.estado} />
               </div>
 
-              <h4 className="text-base font-bold text-slate-800">
+              <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">
                 Lic. {prof.nombres} {prof.apellidos}
               </h4>
-              <p className="text-xs text-primary-600 font-medium mt-0.5">Atención Psicológica</p>
+              <p className="text-xs text-primary-600 dark:text-primary-400 font-medium mt-0.5">Atención Psicológica</p>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/50 space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
                 <div className="flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-slate-400" />
+                  <Mail className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                   <span>{prof.correo}</span>
                 </div>
                 {prof.telefono && (
                   <div className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
+                    <Phone className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                     <span>{prof.telefono}</span>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex justify-end">
               <Button
                 size="sm"
                 variant={prof.estado === 'ACTIVO' ? 'secondary' : 'primary'}

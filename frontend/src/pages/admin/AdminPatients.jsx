@@ -127,8 +127,8 @@ export const AdminPatients = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Directorio de Pacientes</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Directorio de Pacientes</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Supervisa los expedientes, estado de atención y asignaciones de terapeutas.
           </p>
         </div>
@@ -137,14 +137,14 @@ export const AdminPatients = () => {
           <select
             value={filtroEstado}
             onChange={(e) => setFiltroEstado(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
           >
-            <option value="">Todos los Estados</option>
-            <option value="SOLICITANTE">Solicitante</option>
-            <option value="EN_ESPERA">En Espera</option>
-            <option value="ACTIVO">Activo</option>
-            <option value="FINALIZADO">Finalizado</option>
-            <option value="BAJA">Baja</option>
+            <option value="" className="dark:bg-[#111827]">Todos los Estados</option>
+            <option value="SOLICITANTE" className="dark:bg-[#111827]">Solicitante</option>
+            <option value="EN_ESPERA" className="dark:bg-[#111827]">En Espera</option>
+            <option value="ACTIVO" className="dark:bg-[#111827]">Activo</option>
+            <option value="FINALIZADO" className="dark:bg-[#111827]">Finalizado</option>
+            <option value="BAJA" className="dark:bg-[#111827]">Baja</option>
           </select>
 
           <Button onClick={() => setCreateModalOpen(true)} icon={Plus}>
@@ -164,7 +164,7 @@ export const AdminPatients = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold">
+              <tr className="border-b border-slate-100 dark:border-slate-700/50 text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">
                 <th className="pb-3 px-3">Expediente / Nombre</th>
                 <th className="pb-3 px-3">Contacto</th>
                 <th className="pb-3 px-3">Estado</th>
@@ -172,29 +172,29 @@ export const AdminPatients = () => {
                 <th className="pb-3 px-3 text-right">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {pacientesFiltrados.map((pac) => (
-                <tr key={pac.id_paciente} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={pac.id_paciente} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="py-3 px-3">
-                    <p className="font-bold text-slate-800 text-sm">
+                    <p className="font-bold text-slate-800 dark:text-slate-100 text-sm">
                       {pac.nombres} {pac.apellidos}
                     </p>
-                    <p className="text-[11px] text-slate-400">Expediente #{pac.id_paciente}</p>
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500">Expediente #{pac.id_paciente}</p>
                   </td>
                   <td className="py-3 px-3">
-                    <p className="text-slate-700">{pac.telefono || 'Sin teléfono'}</p>
-                    <p className="text-[11px] text-slate-400">{pac.correo || 'Sin correo asociado'}</p>
+                    <p className="text-slate-700 dark:text-slate-200">{pac.telefono || 'Sin teléfono'}</p>
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500">{pac.correo || 'Sin correo asociado'}</p>
                   </td>
                   <td className="py-3 px-3">
                     <Badge status={pac.estado} />
                   </td>
                   <td className="py-3 px-3">
                     {pac.prof_nombres ? (
-                      <span className="font-semibold text-slate-700">
+                      <span className="font-semibold text-slate-700 dark:text-slate-200">
                         Lic. {pac.prof_nombres} {pac.prof_apellidos}
                       </span>
                     ) : (
-                      <span className="text-slate-400 italic">Sin asignar</span>
+                      <span className="text-slate-400 dark:text-slate-500 italic">Sin asignar</span>
                     )}
                   </td>
                   <td className="py-3 px-3 text-right">
@@ -278,7 +278,7 @@ export const AdminPatients = () => {
       <Modal isOpen={assignModalOpen} onClose={() => setAssignModalOpen(false)} title="Asignación Administrativa">
         {selectedPatient && (
           <div className="space-y-4">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Asignar profesional responsable a <strong>{selectedPatient.nombres} {selectedPatient.apellidos}</strong>.
             </p>
 

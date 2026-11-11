@@ -76,9 +76,9 @@ export const RegisterPage = () => {
         {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       </button>
 
-      <div className="max-w-xl w-full bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 p-8 sm:p-10 transition-colors">
+      <div className="max-w-xl w-full bg-white dark:bg-[#111827] rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-glow-teal/10 border border-slate-100 dark:border-slate-700/50 p-8 sm:p-10 transition-colors">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-primary-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-primary-600/30 mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-teal-600/30 mb-4">
             <HeartPulse className="w-6 h-6" />
           </div>
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Crea tu cuenta de Paciente</h2>

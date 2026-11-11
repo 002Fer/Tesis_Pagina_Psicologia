@@ -191,8 +191,8 @@ export const ProfessionalFollowUp = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Planes de Seguimiento Terapéutico</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Planes de Seguimiento Terapéutico</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Administra la frecuencia de atención (Semanal, Quincenal, Mensual) y programa citas periódicas de forma estructurada.
           </p>
         </div>
@@ -211,16 +211,16 @@ export const ProfessionalFollowUp = () => {
           return (
             <div
               key={paciente.id_paciente}
-              className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <h4 className="text-base font-bold text-slate-800">
+                  <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">
                     {paciente.nombres} {paciente.apellidos}
                   </h4>
                   <Badge status={paciente.estado} />
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Expediente #{paciente.id_paciente} • Vinculación:{' '}
                   {tieneVinculo ? (
                     <strong className="text-emerald-700 font-semibold">Activa</strong>
@@ -253,13 +253,13 @@ export const ProfessionalFollowUp = () => {
                       size="sm"
                       variant="ghost"
                       onClick={() => handleFinalizarSeguimiento(paciente)}
-                      className="text-rose-600 hover:bg-rose-50"
+                      className="text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"
                     >
                       Finalizar Proceso
                     </Button>
                   </>
                 ) : (
-                  <span className="text-xs text-slate-400 italic">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 italic">
                     El plan se habilitará al registrar la primera cita como realizada.
                   </span>
                 )}
@@ -304,14 +304,14 @@ export const ProfessionalFollowUp = () => {
               ]}
             />
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Hora Habitual
               </label>
               <input
                 type="time"
                 value={horaInicio}
                 onChange={(e) => setHoraInicio(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none dark:bg-[#111827] dark:text-slate-200"
               />
             </div>
           </div>
@@ -330,7 +330,7 @@ export const ProfessionalFollowUp = () => {
       {/* Modal Modificar Frecuencia */}
       <Modal isOpen={frecuenciaModalOpen} onClose={() => setFrecuenciaModalOpen(false)} title="Modificar Frecuencia de Atención">
         <div className="space-y-4">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Ajusta la periodicidad del seguimiento de acuerdo con el avance del paciente. El cambio quedará registrado en el historial administrativo con trazabilidad.
           </p>
 

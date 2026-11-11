@@ -85,8 +85,8 @@ export const ProfessionalAgenda = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Mi Agenda de Citas</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Mi Agenda de Citas</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Revisa las sesiones programadas, confirma asistencia y supervisa el uso de consultorios.
           </p>
         </div>
@@ -97,20 +97,20 @@ export const ProfessionalAgenda = () => {
             type="date"
             value={fechaFiltro}
             onChange={(e) => setFechaFiltro(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-medium bg-white dark:bg-[#111827] dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
 
           <select
             value={estadoFiltro}
             onChange={(e) => setEstadoFiltro(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-medium bg-white dark:bg-[#111827] dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
-            <option value="">Todos los Estados</option>
-            <option value="PROGRAMADA">Programada</option>
-            <option value="REALIZADA">Realizada</option>
-            <option value="CANCELADA">Cancelada</option>
-            <option value="REPROGRAMADA">Reprogramada</option>
-            <option value="INASISTENCIA">Inasistencia</option>
+            <option value="" className="dark:bg-[#111827]">Todos los Estados</option>
+            <option value="PROGRAMADA" className="dark:bg-[#111827]">Programada</option>
+            <option value="REALIZADA" className="dark:bg-[#111827]">Realizada</option>
+            <option value="CANCELADA" className="dark:bg-[#111827]">Cancelada</option>
+            <option value="REPROGRAMADA" className="dark:bg-[#111827]">Reprogramada</option>
+            <option value="INASISTENCIA" className="dark:bg-[#111827]">Inasistencia</option>
           </select>
 
           {(fechaFiltro || estadoFiltro) && (
@@ -119,7 +119,7 @@ export const ProfessionalAgenda = () => {
                 setFechaFiltro('');
                 setEstadoFiltro('');
               }}
-              className="text-xs text-primary-600 hover:text-primary-700 font-semibold"
+              className="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold"
             >
               Limpiar Filtros
             </button>
@@ -148,35 +148,35 @@ export const ProfessionalAgenda = () => {
             return (
               <div
                 key={cita.id_cita}
-                className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-4 sm:p-5 shadow-sm dark:shadow-none flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="flex items-start sm:items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-slate-100 flex flex-col items-center justify-center shrink-0 text-slate-700">
+                  <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0 text-slate-700 dark:text-slate-200">
                     <span className="text-xs font-bold leading-none">{formatDateUTC(cita.fecha_hora_inicio, { day: 'numeric' })}</span>
-                    <span className="text-[10px] uppercase font-semibold text-slate-400">
+                    <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500">
                       {formatDateUTC(cita.fecha_hora_inicio, { month: 'short' })}
                     </span>
                   </div>
 
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="text-sm font-bold text-slate-800">
+                      <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                         {cita.pac_nombres} {cita.pac_apellidos}
                       </h4>
                       <Badge status={cita.estado} />
-                      <span className="text-[11px] font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded-full">
+                      <span className="text-[11px] font-semibold text-primary-600 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 px-2 py-0.5 rounded-full">
                         {cita.tipo}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-500 mt-1.5 flex-wrap">
+                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 mt-1.5 flex-wrap">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                         {formatTimeUTC(cita.fecha_hora_inicio)} - {formatTimeUTC(cita.fecha_hora_fin)}
                       </span>
                       {cita.espacio_nombre && (
                         <span className="flex items-center gap-1">
-                          <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                          <Building2 className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                           {cita.espacio_nombre}
                         </span>
                       )}
@@ -202,8 +202,8 @@ export const ProfessionalAgenda = () => {
         </div>
       ) : (
         <Card>
-          <div className="text-center py-12 text-slate-400 text-xs">
-            <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+          <div className="text-center py-12 text-slate-400 dark:text-slate-500 text-xs">
+            <Calendar className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
             No se encontraron citas con los criterios seleccionados.
           </div>
         </Card>
@@ -217,7 +217,7 @@ export const ProfessionalAgenda = () => {
       >
         {selectedCita && (
           <div className="space-y-4">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Registrar asistencia para la sesión de{' '}
               <strong>
                 {selectedCita.pac_nombres} {selectedCita.pac_apellidos}
@@ -252,7 +252,7 @@ export const ProfessionalAgenda = () => {
             )}
 
             {selectedCita.tipo === 'INICIAL' && estadoAsistencia === 'ASISTIO' && (
-              <div className="text-xs bg-emerald-50 border border-emerald-200 text-emerald-800 p-3 rounded-lg">
+              <div className="text-xs bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700/50 text-emerald-800 dark:text-emerald-300 p-3 rounded-lg">
                 <strong>Nota:</strong> Al registrar asistencia a la primera cita inicial, el paciente quedará formalmente vinculado a ti para el seguimiento terapéutico.
               </div>
             )}

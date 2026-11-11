@@ -54,15 +54,15 @@ export const ProfessionalDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Saludo */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#111827] rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-700/50 shadow-sm dark:shadow-none flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold text-primary-600 uppercase tracking-wider">
+          <span className="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase tracking-wider">
             Espacio de Atención Clínica
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-slate-100 mt-1">
             Lic. {user?.perfil?.nombres} {user?.perfil?.apellidos}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Gestión de agenda, pacientes vinculados, asistencia y planes de seguimiento terapéutico.
           </p>
         </div>
@@ -120,24 +120,24 @@ export const ProfessionalDashboard = () => {
         title="Agenda del Día de Hoy"
         subtitle="Pacientes y sesiones programadas para hoy"
         action={
-          <Link to="/profesional/agenda" className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1">
+          <Link to="/profesional/agenda" className="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 flex items-center gap-1">
             Ver Agenda Completa <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         }
       >
         {citasHoy.length > 0 ? (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-700/50">
             {citasHoy.map((cita) => (
               <div key={cita.id_cita} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary-50 text-primary-700 font-bold flex items-center justify-center text-xs shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 font-bold flex items-center justify-center text-xs shrink-0">
                     {new Date(cita.fecha_hora_inicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-800">
+                    <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                       {cita.pac_nombres} {cita.pac_apellidos}
                     </h4>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Cita {cita.tipo} • Espacio: {cita.espacio_nombre || 'Consultorio Asignado'}
                     </p>
                   </div>
@@ -157,8 +157,8 @@ export const ProfessionalDashboard = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-slate-400 text-xs">
-            <Calendar className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+          <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-xs">
+            <Calendar className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
             No tienes citas agendadas para el día de hoy.
           </div>
         )}

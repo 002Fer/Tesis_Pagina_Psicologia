@@ -50,8 +50,8 @@ export const AdminAppointments = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Supervisión Global de Citas</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Supervisión Global de Citas</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Visualización y control de todas las citas del centro psicológico.
           </p>
         </div>
@@ -62,20 +62,20 @@ export const AdminAppointments = () => {
             type="date"
             value={fechaFiltro}
             onChange={(e) => setFechaFiltro(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
           />
 
           <select
             value={estadoFiltro}
             onChange={(e) => setEstadoFiltro(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
           >
-            <option value="">Todos los Estados</option>
-            <option value="PROGRAMADA">Programada</option>
-            <option value="REALIZADA">Realizada</option>
-            <option value="CANCELADA">Cancelada</option>
-            <option value="REPROGRAMADA">Reprogramada</option>
-            <option value="INASISTENCIA">Inasistencia</option>
+            <option value="" className="dark:bg-[#111827]">Todos los Estados</option>
+            <option value="PROGRAMADA" className="dark:bg-[#111827]">Programada</option>
+            <option value="REALIZADA" className="dark:bg-[#111827]">Realizada</option>
+            <option value="CANCELADA" className="dark:bg-[#111827]">Cancelada</option>
+            <option value="REPROGRAMADA" className="dark:bg-[#111827]">Reprogramada</option>
+            <option value="INASISTENCIA" className="dark:bg-[#111827]">Inasistencia</option>
           </select>
 
           <input
@@ -83,7 +83,7 @@ export const AdminAppointments = () => {
             placeholder="Buscar paciente o terapeuta..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
           />
         </div>
       </div>
@@ -98,7 +98,7 @@ export const AdminAppointments = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold">
+              <tr className="border-b border-slate-100 dark:border-slate-700/50 text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">
                 <th className="pb-3 px-3">Fecha y Hora</th>
                 <th className="pb-3 px-3">Paciente</th>
                 <th className="pb-3 px-3">Terapeuta Asignado</th>
@@ -107,32 +107,32 @@ export const AdminAppointments = () => {
                 <th className="pb-3 px-3">Estado</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {citasFiltradas.map((c) => {
                 const inicio = new Date(c.fecha_hora_inicio);
                 const fin = new Date(c.fecha_hora_fin);
 
                 return (
-                  <tr key={c.id_cita} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={c.id_cita} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                     <td className="py-3 px-3">
-                      <p className="font-bold text-slate-800">
+                      <p className="font-bold text-slate-800 dark:text-slate-100">
                         {formatDateUTC(c.fecha_hora_inicio, { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
-                      <p className="text-[11px] text-slate-400">
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">
                         {formatTimeUTC(c.fecha_hora_inicio)} - {formatTimeUTC(c.fecha_hora_fin)}
                       </p>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-slate-800">
+                    <td className="py-3 px-3 font-semibold text-slate-800 dark:text-slate-100">
                       {c.pac_nombres} {c.pac_apellidos}
                     </td>
-                    <td className="py-3 px-3 text-slate-700">
+                    <td className="py-3 px-3 text-slate-700 dark:text-slate-200">
                       Lic. {c.prof_nombres} {c.prof_apellidos}
                     </td>
-                    <td className="py-3 px-3 text-slate-500">
-                      {c.espacio_nombre || <span className="italic text-slate-400">Por asignar</span>}
+                    <td className="py-3 px-3 text-slate-500 dark:text-slate-400">
+                      {c.espacio_nombre || <span className="italic text-slate-400 dark:text-slate-500">Por asignar</span>}
                     </td>
                     <td className="py-3 px-3">
-                      <span className="font-medium text-primary-700 bg-primary-50 px-2 py-0.5 rounded-full text-[10px]">
+                      <span className="font-medium text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/40 px-2 py-0.5 rounded-full text-[10px]">
                         {c.tipo}
                       </span>
                     </td>

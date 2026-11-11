@@ -93,8 +93,8 @@ export const ProfessionalAttendance = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-800">Control de Asistencia e Inasistencia</h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Control de Asistencia e Inasistencia</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Registra el cumplimiento de las sesiones de atención y justificaciones de inasistencia.
         </p>
       </div>
@@ -111,19 +111,19 @@ export const ProfessionalAttendance = () => {
         subtitle="Sesiones programadas que requieren confirmación administrativa"
       >
         {citasPendientes.length > 0 ? (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-700/50">
             {citasPendientes.map((cita) => {
               const inicio = new Date(cita.fecha_hora_inicio);
               return (
                 <div key={cita.id_cita} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-slate-800">
+                      <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">
                         {cita.pac_nombres} {cita.pac_apellidos}
                       </h4>
                       <Badge status="PROGRAMADA">{cita.tipo}</Badge>
                     </div>
-                    <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-2">
                       <Calendar className="w-3.5 h-3.5" />
                       {inicio.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })} •{' '}
                       {inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
@@ -138,7 +138,7 @@ export const ProfessionalAttendance = () => {
             })}
           </div>
         ) : (
-          <p className="text-xs text-slate-400 text-center py-6">
+          <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">
             No tienes citas programadas pendientes de registro de asistencia.
           </p>
         )}
@@ -147,14 +147,14 @@ export const ProfessionalAttendance = () => {
       {/* Registro Histórico */}
       <Card title="Historial de Asistencias Registradas" subtitle="Últimas atenciones completadas o inasistencias">
         {asistenciasRecientes.length > 0 ? (
-          <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+          <div className="divide-y divide-slate-100 dark:divide-slate-700/50 max-h-96 overflow-y-auto">
             {asistenciasRecientes.map((asist) => (
               <div key={asist.id_asistencia} className="py-3 flex items-center justify-between text-xs">
                 <div>
-                  <h5 className="font-bold text-slate-800">
+                  <h5 className="font-bold text-slate-800 dark:text-slate-100">
                     {asist.pac_nombres} {asist.pac_apellidos}
                   </h5>
-                  <p className="text-slate-400">
+                  <p className="text-slate-400 dark:text-slate-500">
                     Fecha de cita:{' '}
                     {new Date(asist.fecha_hora_inicio).toLocaleDateString('es-ES', {
                       day: 'numeric',
@@ -167,7 +167,7 @@ export const ProfessionalAttendance = () => {
                 <div className="flex items-center gap-2">
                   <Badge status={asist.estado} />
                   {asist.tipo_inasistencia && (
-                    <span className="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full font-medium">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700/40 px-2 py-0.5 rounded-full font-medium">
                       {asist.tipo_inasistencia}
                     </span>
                   )}
@@ -176,7 +176,7 @@ export const ProfessionalAttendance = () => {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-400 text-center py-6">Aún no hay registros de asistencia en el sistema.</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-6">Aún no hay registros de asistencia en el sistema.</p>
         )}
       </Card>
 
@@ -184,7 +184,7 @@ export const ProfessionalAttendance = () => {
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Registrar Asistencia">
         {selectedCita && (
           <div className="space-y-4">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Sesión con <strong>{selectedCita.pac_nombres} {selectedCita.pac_apellidos}</strong>.
             </p>
 

@@ -108,8 +108,8 @@ export const ProfessionalAvailability = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Mi Disponibilidad de Atención</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Mi Disponibilidad de Atención</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Configura los días y franjas horarias en las que ofreces atención para que los pacientes puedan agendar citas.
           </p>
         </div>
@@ -131,14 +131,14 @@ export const ProfessionalAvailability = () => {
           <div
             key={dia.diaNum}
             className={`rounded-2xl border p-4 transition-all ${
-              dia.franjas.length > 0 ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-50/70 border-dashed border-slate-200'
+              dia.franjas.length > 0 ? 'bg-white dark:bg-[#111827] border-slate-200 dark:border-slate-700/50 shadow-sm dark:shadow-none' : 'bg-slate-50/70 dark:bg-slate-800/30 border-dashed border-slate-200 dark:border-slate-700'
             }`}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-              <h4 className="text-sm font-bold text-slate-800">{dia.nombre}</h4>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700/50 mb-3">
+              <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">{dia.nombre}</h4>
               <span
                 className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  dia.franjas.length > 0 ? 'bg-primary-50 text-primary-700' : 'bg-slate-200 text-slate-500'
+                  dia.franjas.length > 0 ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300' : 'bg-slate-200 dark:bg-slate-700/40 text-slate-500 dark:text-slate-400'
                 }`}
               >
                 {dia.franjas.length} {dia.franjas.length === 1 ? 'franja' : 'franjas'}
@@ -150,18 +150,18 @@ export const ProfessionalAvailability = () => {
                 {dia.franjas.map((slot) => (
                   <div
                     key={slot.id_disponibilidad}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 group"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 group"
                   >
                     <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-primary-600" />
-                      <span className="text-xs font-semibold text-slate-700">
+                      <Clock className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
+                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                         {slot.hora_inicio.substring(0, 5)} - {slot.hora_fin.substring(0, 5)}
                       </span>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleDeleteSlot(slot.id_disponibilidad)}
-                      className="text-slate-300 hover:text-rose-600 p-1 rounded transition-colors opacity-70 group-hover:opacity-100"
+                      className="text-slate-300 dark:text-slate-600 hover:text-rose-600 p-1 rounded transition-colors opacity-70 group-hover:opacity-100"
                       title="Eliminar franja"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -170,7 +170,7 @@ export const ProfessionalAvailability = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-400 text-center py-4">Sin atención este día</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-4">Sin atención este día</p>
             )}
           </div>
         ))}
@@ -198,7 +198,7 @@ export const ProfessionalAvailability = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Hora de Inicio
               </label>
               <input
@@ -206,11 +206,11 @@ export const ProfessionalAvailability = () => {
                 required
                 value={horaInicio}
                 onChange={(e) => setHoraInicio(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none dark:bg-[#111827] dark:text-slate-200"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Hora de Fin
               </label>
               <input
@@ -218,7 +218,7 @@ export const ProfessionalAvailability = () => {
                 required
                 value={horaFin}
                 onChange={(e) => setHoraFin(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none dark:bg-[#111827] dark:text-slate-200"
               />
             </div>
           </div>

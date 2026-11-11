@@ -82,8 +82,8 @@ export const AdminSpaces = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Espacios de Atención Clínica</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Espacios de Atención Clínica</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Gestión y disponibilidad de consultorios físicos y salas telemáticas para sesiones psicológicas.
           </p>
         </div>
@@ -103,26 +103,26 @@ export const AdminSpaces = () => {
         {espacios.map((esp) => (
           <div
             key={esp.id_espacio}
-            className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+            className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none hover:shadow-md dark:hover:shadow-glow-teal/5 transition-shadow flex flex-col justify-between"
           >
             <div>
               <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 flex items-center justify-center font-bold">
                   <Building2 className="w-5 h-5" />
                 </div>
                 <Badge status={esp.estado} />
               </div>
 
-              <h4 className="text-base font-bold text-slate-800">{esp.nombre}</h4>
-              <p className="text-xs text-slate-500 mt-1">{esp.descripcion || 'Sin descripción adicional'}</p>
+              <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">{esp.nombre}</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{esp.descripcion || 'Sin descripción adicional'}</p>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600">
-                <span className="text-slate-400">Ubicación: </span>
-                <span className="font-semibold text-slate-700">{esp.ubicacion || 'Instalaciones Centrales'}</span>
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700/50 text-xs text-slate-600 dark:text-slate-300">
+                <span className="text-slate-400 dark:text-slate-500">Ubicación: </span>
+                <span className="font-semibold text-slate-700 dark:text-slate-200">{esp.ubicacion || 'Instalaciones Centrales'}</span>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex justify-end">
               <Button
                 size="sm"
                 variant={esp.estado === 'DISPONIBLE' ? 'secondary' : 'primary'}
@@ -156,7 +156,7 @@ export const AdminSpaces = () => {
           />
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Descripción del Espacio
             </label>
             <textarea
@@ -165,7 +165,7 @@ export const AdminSpaces = () => {
               placeholder="Equipamiento, propósito o características del consultorio..."
               value={formData.descripcion}
               onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+              className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
             />
           </div>
 

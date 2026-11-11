@@ -2,9 +2,9 @@ import React from 'react';
 
 export const Card = ({ children, className = '', title, subtitle, action }) => {
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors ${className}`}>
+    <div className={`bg-white dark:bg-[#111827] rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm dark:shadow-none overflow-hidden transition-colors ${className}`}>
       {(title || action) && (
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700/50">
           <div>
             {title && <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-base">{title}</h3>}
             {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
@@ -28,7 +28,7 @@ export const StatCard = ({ title, value, icon: Icon, color = 'primary', descript
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-start justify-between transition-colors">
+    <div className="bg-white dark:bg-[#111827] p-5 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm dark:shadow-none flex items-start justify-between transition-colors">
       <div>
         <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{title}</p>
         <h4 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mt-1">{value}</h4>

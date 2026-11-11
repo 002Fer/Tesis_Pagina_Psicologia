@@ -126,21 +126,21 @@ export const AdminUsers = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Administración de Usuarios</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Administración de Usuarios</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Gestión de credenciales, roles y accesos a la plataforma.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="relative w-64">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Buscar usuario o correo..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+              className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-300 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-[#111827] dark:border-slate-700 dark:text-slate-200"
             />
           </div>
           <Button onClick={() => setModalOpen(true)} icon={Plus}>
@@ -160,7 +160,7 @@ export const AdminUsers = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold">
+              <tr className="border-b border-slate-100 dark:border-slate-700/50 text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">
                 <th className="pb-3 px-3">Usuario / Nombre</th>
                 <th className="pb-3 px-3">Correo Electrónico</th>
                 <th className="pb-3 px-3">Rol Asignado</th>
@@ -168,19 +168,19 @@ export const AdminUsers = () => {
                 <th className="pb-3 px-3">Fecha de Registro</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
               {usuariosFiltrados.map((u, i) => (
-                <tr key={i} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="py-3 px-3 font-bold text-slate-800">{u.nombres}</td>
-                  <td className="py-3 px-3 text-slate-600">{u.correo}</td>
+                <tr key={i} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                  <td className="py-3 px-3 font-bold text-slate-800 dark:text-slate-100">{u.nombres}</td>
+                  <td className="py-3 px-3 text-slate-600 dark:text-slate-300">{u.correo}</td>
                   <td className="py-3 px-3">
                     <span
                       className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                         u.rol === 'ADMINISTRADOR'
-                          ? 'bg-purple-50 text-purple-700'
+                          ? 'bg-purple-50 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
                           : u.rol === 'PROFESIONAL'
-                          ? 'bg-primary-50 text-primary-700'
-                          : 'bg-blue-50 text-blue-700'
+                          ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300'
+                          : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
                       }`}
                     >
                       {u.rol}
@@ -189,7 +189,7 @@ export const AdminUsers = () => {
                   <td className="py-3 px-3">
                     <Badge status={u.estado || 'ACTIVO'} />
                   </td>
-                  <td className="py-3 px-3 text-slate-400">
+                  <td className="py-3 px-3 text-slate-400 dark:text-slate-500">
                     {u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString('es-ES') : '-'}
                   </td>
                 </tr>
