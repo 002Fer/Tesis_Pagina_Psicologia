@@ -6,6 +6,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
+import { formatDateUTC, formatTimeUTC } from '../../utils/date.utils';
 
 export const AdminAppointments = () => {
   const [citas, setCitas] = useState([]);
@@ -115,11 +116,10 @@ export const AdminAppointments = () => {
                   <tr key={c.id_cita} className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-3 px-3">
                       <p className="font-bold text-slate-800">
-                        {inicio.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {formatDateUTC(c.fecha_hora_inicio, { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
                       <p className="text-[11px] text-slate-400">
-                        {inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} -{' '}
-                        {fin.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                        {formatTimeUTC(c.fecha_hora_inicio)} - {formatTimeUTC(c.fecha_hora_fin)}
                       </p>
                     </td>
                     <td className="py-3 px-3 font-semibold text-slate-800">

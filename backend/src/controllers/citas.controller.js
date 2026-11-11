@@ -4,13 +4,14 @@ const { successResponse, errorResponse } = require('../utils/response.utils');
 class CitasController {
   async getAll(req, res, next) {
     try {
-      const { id_paciente, id_profesional, estado, tipo, fecha } = req.query;
+      const { id_paciente, id_profesional, estado, tipo, fecha, search } = req.query;
       const data = await citasService.getAll(req.user, {
         id_paciente,
         id_profesional,
         estado,
         tipo,
         fecha,
+        search,
       });
       return successResponse(res, 200, 'Lista de citas obtenida', data);
     } catch (err) {

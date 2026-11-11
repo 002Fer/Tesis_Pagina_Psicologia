@@ -88,11 +88,29 @@ class CitasService {
 
     // Filtros de rol
     if (user.rol === 'PACIENTE') {
-      params.push(user.id_paciente);
-      sql += ` AND c.id_paciente = $${params.length}`;
+      let pacId = user.id_paciente;
+      if (!pacId) {
+        const pacLookup = await query('SELECT id_paciente FROM paciente WHERE id_usuario = $1', [user.id_usuario]);
+        if (pacLookup.rowCount > 0) pacId = Number(pacLookup.rows[0].id_paciente);
+      }
+      if (pacId) {
+        params.push(pacId);
+        sql += ` AND c.id_paciente = $${params.length}`;
+      } else {
+        return [];
+      }
     } else if (user.rol === 'PROFESIONAL') {
-      params.push(user.id_profesional);
-      sql += ` AND c.id_profesional = $${params.length}`;
+      let profId = user.id_profesional;
+      if (!profId) {
+        const profLookup = await query('SELECT id_profesional FROM profesional WHERE id_usuario = $1', [user.id_usuario]);
+        if (profLookup.rowCount > 0) profId = Number(profLookup.rows[0].id_profesional);
+      }
+      if (profId) {
+        params.push(profId);
+        sql += ` AND c.id_profesional = $${params.length}`;
+      } else {
+        return [];
+      }
     }
 
     if (filtros.id_paciente && user.rol !== 'PACIENTE') {
@@ -114,6 +132,17 @@ class CitasService {
     if (filtros.fecha) {
       params.push(filtros.fecha);
       sql += ` AND DATE(c.fecha_hora_inicio AT TIME ZONE 'UTC') = $${params.length}::date`;
+    }
+    if (filtros.search) {
+      params.push(`%${filtros.search.toLowerCase().trim()}%`);
+      sql += ` AND (
+        LOWER(prof.nombres) LIKE $${params.length} OR
+        LOWER(prof.apellidos) LIKE $${params.length} OR
+        LOWER(pac.nombres) LIKE $${params.length} OR
+        LOWER(pac.apellidos) LIKE $${params.length} OR
+        LOWER(COALESCE(esp.nombre, '')) LIKE $${params.length} OR
+        CAST(c.id_cita AS TEXT) LIKE $${params.length}
+      )`;
     }
 
     sql += ' ORDER BY c.fecha_hora_inicio ASC';
@@ -176,6 +205,13 @@ class CitasService {
     let pacienteIdFinal = id_paciente;
     if (user.rol === 'PACIENTE') {
       pacienteIdFinal = user.id_paciente;
+      if (!pacienteIdFinal) {
+        const pRes = await query('SELECT id_paciente FROM paciente WHERE id_usuario = $1', [user.id_usuario]);
+        if (pRes.rowCount > 0) pacienteIdFinal = Number(pRes.rows[0].id_paciente);
+      }
+      if (!pacienteIdFinal && id_paciente) {
+        pacienteIdFinal = Number(id_paciente);
+      }
     }
     if (!pacienteIdFinal) {
       const err = new Error('Identificador de paciente no válido.');

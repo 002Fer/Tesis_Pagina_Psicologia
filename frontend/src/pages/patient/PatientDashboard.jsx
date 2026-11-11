@@ -9,6 +9,7 @@ import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
 import Alert from '../../components/common/Alert';
+import { formatDateUTC, formatTimeUTC } from '../../utils/date.utils';
 
 export const PatientDashboard = () => {
   const { user } = useAuth();
@@ -30,7 +31,9 @@ export const PatientDashboard = () => {
           }
 
           // Obtener citas del paciente
-          const citasRes = await appointmentService.getAll({ id_paciente: user.perfil.id_paciente });
+          const citasRes = await appointmentService.getAll(
+            user?.perfil?.id_paciente ? { id_paciente: user.perfil.id_paciente } : {}
+          );
           if (citasRes.success && Array.isArray(citasRes.data)) {
             setTotalCitas(citasRes.data.length);
             const now = new Date();
@@ -138,8 +141,8 @@ export const PatientDashboard = () => {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-800 text-base">
-                        {new Date(proximaCita.fecha_hora_inicio).toLocaleDateString('es-ES', {
+                      <span className="font-bold text-slate-800 text-base capitalize">
+                        {formatDateUTC(proximaCita.fecha_hora_inicio, {
                           weekday: 'long',
                           year: 'numeric',
                           month: 'long',
@@ -150,8 +153,7 @@ export const PatientDashboard = () => {
                     </div>
                     <p className="text-xs text-slate-600 font-medium mt-1 flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-primary-600" />
-                      {new Date(proximaCita.fecha_hora_inicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} -{' '}
-                      {new Date(proximaCita.fecha_hora_fin).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                      {formatTimeUTC(proximaCita.fecha_hora_inicio)} - {formatTimeUTC(proximaCita.fecha_hora_fin)}
                     </p>
                     <p className="text-xs text-slate-500 mt-1">
                       Atendido por: <strong className="text-slate-700">{proximaCita.prof_nombres} {proximaCita.prof_apellidos}</strong>

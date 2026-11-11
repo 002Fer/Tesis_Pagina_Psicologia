@@ -10,6 +10,7 @@ import Modal from '../../components/common/Modal';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
 import Select from '../../components/common/Select';
+import { formatDateUTC, formatTimeUTC } from '../../utils/date.utils';
 
 export const ProfessionalAgenda = () => {
   const { user } = useAuth();
@@ -151,9 +152,9 @@ export const ProfessionalAgenda = () => {
               >
                 <div className="flex items-start sm:items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-slate-100 flex flex-col items-center justify-center shrink-0 text-slate-700">
-                    <span className="text-xs font-bold leading-none">{inicio.getDate()}</span>
+                    <span className="text-xs font-bold leading-none">{formatDateUTC(cita.fecha_hora_inicio, { day: 'numeric' })}</span>
                     <span className="text-[10px] uppercase font-semibold text-slate-400">
-                      {inicio.toLocaleDateString('es-ES', { month: 'short' })}
+                      {formatDateUTC(cita.fecha_hora_inicio, { month: 'short' })}
                     </span>
                   </div>
 
@@ -171,8 +172,7 @@ export const ProfessionalAgenda = () => {
                     <div className="flex items-center gap-4 text-xs text-slate-500 mt-1.5 flex-wrap">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5 text-slate-400" />
-                        {inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} -{' '}
-                        {fin.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                        {formatTimeUTC(cita.fecha_hora_inicio)} - {formatTimeUTC(cita.fecha_hora_fin)}
                       </span>
                       {cita.espacio_nombre && (
                         <span className="flex items-center gap-1">
