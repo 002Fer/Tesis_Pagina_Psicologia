@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { HeartPulse, Mail, Lock, User, Phone, Calendar, UserPlus, Sun, Moon } from 'lucide-react';
+import { HeartPulse, Mail, Lock, User, Phone, Calendar, UserPlus, Sun, Moon, ArrowLeft } from 'lucide-react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
@@ -66,6 +66,15 @@ export const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center p-4 py-8 relative transition-colors duration-200">
+      {/* Botón volver al inicio */}
+      <Link
+        to="/"
+        className="absolute top-6 left-6 inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors shadow-sm"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Inicio</span>
+      </Link>
+
       {/* Botón modo oscuro en la esquina superior derecha */}
       <button
         onClick={toggleTheme}
@@ -78,9 +87,11 @@ export const RegisterPage = () => {
 
       <div className="max-w-xl w-full bg-white dark:bg-[#111827] rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-glow-teal/10 border border-slate-100 dark:border-slate-700/50 p-8 sm:p-10 transition-colors">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-teal-600/30 mb-4">
-            <HeartPulse className="w-6 h-6" />
-          </div>
+          <Link to="/" className="inline-block group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-teal-600/30 mb-4 group-hover:scale-105 transition-transform">
+              <HeartPulse className="w-6 h-6" />
+            </div>
+          </Link>
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Crea tu cuenta de Paciente</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Registra tus datos para solicitar atención y gestionar citas</p>
         </div>

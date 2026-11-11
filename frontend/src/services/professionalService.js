@@ -1,6 +1,10 @@
 import api from './api';
 
 export const professionalService = {
+  async getPublicList() {
+    return api.get('/profesionales/public');
+  },
+
   async getAll(params = {}) {
     return api.get('/profesionales', { params });
   },

@@ -5,6 +5,12 @@ const { authorize } = require('../middlewares/role.middleware');
 
 const router = Router();
 
+// Ruta pública para listar profesionales activos en la página principal / bienvenida (sin requerir token)
+router.get('/public', (req, res, next) => {
+  req.query.estado = 'ACTIVO';
+  return profesionalesController.getAll(req, res, next);
+});
+
 // Rutas protegidas por autenticación
 router.use(authenticate);
 
