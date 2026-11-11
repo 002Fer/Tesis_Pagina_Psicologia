@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import appointmentService from '../../services/appointmentService';
 import patientService from '../../services/patientService';
-import { Calendar, User, Clock, ArrowRight, HeartPulse, ClipboardList, CheckCircle2 } from 'lucide-react';
+import { Calendar, User, Clock, ArrowRight, HeartPulse, ClipboardList, CheckCircle2, Sparkles, Building2 } from 'lucide-react';
 import Card, { StatCard } from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Button from '../../components/common/Button';
@@ -63,33 +63,33 @@ export const PatientDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Banner de Bienvenida */}
-      <div className="bg-gradient-to-r from-primary-700 via-primary-600 to-teal-600 rounded-3xl p-6 sm:p-8 text-white shadow-lg shadow-primary-900/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
+      {/* Banner de Bienvenida con acabado llamativo */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 dark:from-teal-950/80 dark:via-teal-900/60 dark:to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-teal-900/15 border border-teal-500/20 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-sm">
+            <span className="px-3 py-0.5 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md border border-white/20">
               Portal del Paciente
             </span>
-            <Badge status={pacienteDetalle?.estado || 'ACTIVO'} className="bg-white/90" />
+            <Badge status={pacienteDetalle?.estado || 'ACTIVO'} className="bg-white/90 text-slate-800" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
             Hola, {user?.perfil?.nombres || 'Paciente'}
           </h2>
-          <p className="text-primary-100 text-sm mt-1 max-w-xl">
-            Gestiona tus citas de atención psicológica, consulta a tus profesionales y realiza el seguimiento administrativo de tu tratamiento.
+          <p className="text-teal-100 dark:text-teal-200/80 text-sm mt-1 max-w-xl leading-relaxed">
+            Gestiona tus citas de atención psicológica, consulta a tus terapeutas y realiza el seguimiento administrativo de tu tratamiento.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 relative z-10">
           <Link to="/paciente/profesionales">
-            <Button variant="secondary" className="bg-white text-primary-700 hover:bg-primary-50 border-0 font-semibold shadow-md">
+            <button className="px-4 py-2 rounded-xl bg-white text-teal-800 hover:bg-teal-50 font-bold text-sm shadow-md transition-all cursor-pointer">
               Agendar Cita
-            </Button>
+            </button>
           </Link>
           <Link to="/paciente/solicitud">
-            <Button variant="ghost" className="text-white hover:bg-white/10 border border-white/20">
+            <button className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/25 font-bold text-sm backdrop-blur-sm transition-all cursor-pointer">
               Solicitud de Atención
-            </Button>
+            </button>
           </Link>
         </div>
       </div>
@@ -127,21 +127,22 @@ export const PatientDashboard = () => {
           <Card
             title="Próxima Cita Programada"
             subtitle="Detalles de tu siguiente sesión de atención"
+            className="dark:bg-[#111827] dark:border-slate-800 shadow-md dark:shadow-black/40"
             action={
-              <Link to="/paciente/citas" className="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1">
+              <Link to="/paciente/citas" className="text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1">
                 Ver todas <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             }
           >
             {proximaCita ? (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 rounded-2xl bg-primary-50/50 border border-primary-100 gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 rounded-2xl bg-teal-50/70 dark:bg-[#0b0f19] border border-teal-200/80 dark:border-slate-800 gap-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-primary-600/20">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-teal-500/25">
                     <Calendar className="w-6 h-6" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-800 text-base capitalize">
+                      <span className="font-bold text-slate-900 dark:text-white text-base capitalize">
                         {formatDateUTC(proximaCita.fecha_hora_inicio, {
                           weekday: 'long',
                           year: 'numeric',
@@ -151,12 +152,12 @@ export const PatientDashboard = () => {
                       </span>
                       <Badge status={proximaCita.estado} />
                     </div>
-                    <p className="text-xs text-slate-600 font-medium mt-1 flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-primary-600" />
+                    <p className="text-xs text-slate-600 dark:text-slate-300 font-semibold mt-1 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                       {formatTimeUTC(proximaCita.fecha_hora_inicio)} - {formatTimeUTC(proximaCita.fecha_hora_fin)}
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Atendido por: <strong className="text-slate-700">{proximaCita.prof_nombres} {proximaCita.prof_apellidos}</strong>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                      Atendido por: <strong className="text-slate-800 dark:text-teal-300">{proximaCita.prof_nombres} {proximaCita.prof_apellidos}</strong>
                       {proximaCita.espacio_nombre && ` • ${proximaCita.espacio_nombre}`}
                     </p>
                   </div>
@@ -170,17 +171,17 @@ export const PatientDashboard = () => {
               </div>
             ) : (
               <div className="text-center py-8">
-                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-3">
+                <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400 mb-3">
                   <Calendar className="w-6 h-6" />
                 </div>
-                <h4 className="text-sm font-semibold text-slate-700">No tienes citas próximas agendadas</h4>
-                <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">No tienes citas próximas agendadas</h4>
+                <p className="text-xs text-slate-400 dark:text-slate-400 mt-1 max-w-sm mx-auto">
                   Selecciona a uno de nuestros profesionales de atención psicológica y reserva un horario disponible.
                 </p>
                 <Link to="/paciente/profesionales">
-                  <Button size="sm" className="mt-4">
+                  <button className="mt-4 px-4 py-2 rounded-xl text-white font-bold text-xs bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 shadow-md transition-all cursor-pointer">
                     Explorar Profesionales y Horarios
-                  </Button>
+                  </button>
                 </Link>
               </div>
             )}
@@ -189,29 +190,33 @@ export const PatientDashboard = () => {
 
         {/* Profesional y Seguimiento */}
         <div>
-          <Card title="Tu Profesional" subtitle="Seguimiento de tu caso">
+          <Card
+            title="Tu Profesional"
+            subtitle="Seguimiento de tu caso"
+            className="dark:bg-[#111827] dark:border-slate-800 shadow-md dark:shadow-black/40"
+          >
             {vinculo ? (
               <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                  <div className="w-10 h-10 rounded-full bg-primary-100 text-primary-700 font-bold flex items-center justify-center text-sm">
+                <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-[#0b0f19] border border-slate-200/80 dark:border-slate-800">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white font-bold flex items-center justify-center text-sm shadow-xs">
                     {vinculo.prof_nombres?.charAt(0)}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-800">
-                      {vinculo.prof_nombres} {vinculo.prof_apellidos}
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                      Lic. {vinculo.prof_nombres} {vinculo.prof_apellidos}
                     </h4>
-                    <p className="text-[11px] text-slate-400">Atención Psicológica</p>
+                    <p className="text-[11px] text-teal-600 dark:text-teal-400 font-medium">Atención Psicológica</p>
                   </div>
                 </div>
 
-                <div className="text-xs space-y-2 text-slate-600 border-t border-slate-100 pt-3">
+                <div className="text-xs space-y-2 text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800 pt-3">
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Vinculación:</span>
-                    <span className="font-medium text-emerald-600">Activa</span>
+                    <span className="text-slate-400 dark:text-slate-500">Vinculación:</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">Activa</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Desde:</span>
-                    <span className="font-medium">{new Date(vinculo.fecha_inicio).toLocaleDateString('es-ES')}</span>
+                    <span className="text-slate-400 dark:text-slate-500">Desde:</span>
+                    <span className="font-semibold text-slate-800 dark:text-slate-200">{new Date(vinculo.fecha_inicio).toLocaleDateString('es-ES')}</span>
                   </div>
                 </div>
 
@@ -223,7 +228,7 @@ export const PatientDashboard = () => {
               </div>
             ) : (
               <div className="text-center py-6">
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                   Aún no estás formalmente vinculado a un profesional. Tu vinculación se establecerá tras tu primera atención.
                 </p>
                 <Link to="/paciente/profesionales">

@@ -20,6 +20,7 @@ import {
   Search,
   Sun,
   Moon,
+  Sparkles,
 } from 'lucide-react';
 
 export const DashboardLayout = () => {
@@ -90,22 +91,22 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex transition-colors duration-200">
       {/* Sidebar Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shrink-0">
-        <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-800">
-          <div className="w-9 h-9 rounded-xl bg-primary-600 flex items-center justify-center text-white shadow-md shadow-primary-500/20">
+      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-[#0f172a] border-r border-slate-200 dark:border-slate-800/80 shrink-0">
+        <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-800/80">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 flex items-center justify-center text-white shadow-md shadow-teal-500/25">
             <HeartPulse className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-sm font-bold text-slate-800 dark:text-slate-100 leading-tight">PsicoGestión</h1>
-            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Servicios Psicológicos</p>
+            <h1 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">PsicoGestión</h1>
+            <p className="text-[10px] text-teal-600 dark:text-teal-400 font-semibold tracking-wide">Servicios Psicológicos</p>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
-          <p className="px-3 text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5">
+          <p className="px-3 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
             Menú Principal
           </p>
           {navLinks.map((item) => {
@@ -116,10 +117,10 @@ export const DashboardLayout = () => {
                 to={item.to}
                 end={item.to === '/paciente' || item.to === '/profesional' || item.to === '/admin'}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                  `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-300 font-semibold shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
+                      ? 'bg-primary-50 text-primary-700 border border-primary-200/80 dark:bg-gradient-to-r dark:from-teal-500/20 dark:to-emerald-500/10 dark:text-teal-300 dark:border-teal-500/40 font-semibold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/70 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100 border border-transparent'
                   }`
                 }
               >
@@ -131,19 +132,19 @@ export const DashboardLayout = () => {
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50">
           <div className="flex items-center gap-3 px-2 py-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/60 text-primary-700 dark:text-primary-300 font-bold flex items-center justify-center text-xs">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-teal-600 to-emerald-500 text-white font-bold flex items-center justify-center text-xs shadow-xs">
               {getUserDisplayName().charAt(0)}
             </div>
             <div className="overflow-hidden flex-1">
-              <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{getUserDisplayName()}</p>
-              <p className="text-[11px] text-slate-400 dark:text-slate-500 truncate">{getRoleLabel(user?.rol)}</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{getUserDisplayName()}</p>
+              <p className="text-[11px] text-teal-600 dark:text-teal-400 font-medium truncate">{getRoleLabel(user?.rol)}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             Cerrar Sesión
@@ -154,21 +155,21 @@ export const DashboardLayout = () => {
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
-          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-          <div className="relative flex flex-col w-72 bg-white dark:bg-slate-900 h-full shadow-2xl z-10 border-r border-slate-200 dark:border-slate-800">
+          <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
+          <div className="relative flex flex-col w-72 bg-white dark:bg-[#0f172a] h-full shadow-2xl z-10 border-r border-slate-200 dark:border-slate-800">
             <div className="h-16 flex items-center justify-between px-6 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-teal-600 to-emerald-500 flex items-center justify-center text-white">
                   <HeartPulse className="w-4 h-4" />
                 </div>
-                <span className="font-bold text-sm text-slate-800 dark:text-slate-100">PsicoGestión</span>
+                <span className="font-bold text-sm text-slate-900 dark:text-white">PsicoGestión</span>
               </div>
               <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+            <div className="flex-1 overflow-y-auto px-4 py-6 space-y-1.5">
               {navLinks.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -180,8 +181,8 @@ export const DashboardLayout = () => {
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-300 font-semibold'
-                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
+                          ? 'bg-primary-50 text-primary-700 border border-primary-200 dark:bg-gradient-to-r dark:from-teal-500/20 dark:to-emerald-500/10 dark:text-teal-300 dark:border-teal-500/40 font-semibold'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
                       }`
                     }
                   >
@@ -195,7 +196,7 @@ export const DashboardLayout = () => {
             <div className="p-4 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40"
               >
                 <LogOut className="w-4 h-4" />
                 Cerrar Sesión
@@ -208,7 +209,7 @@ export const DashboardLayout = () => {
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Navbar */}
-        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between shrink-0 transition-colors">
+        <header className="h-16 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 px-6 flex items-center justify-between shrink-0 transition-colors">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -216,34 +217,34 @@ export const DashboardLayout = () => {
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/50">
               {getRoleLabel(user?.rol)}
             </span>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Botón de Modo Oscuro / Claro */}
+            {/* Botón de Modo Oscuro / Claro con acabado llamativo */}
             <button
               onClick={toggleTheme}
               type="button"
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shadow-sm"
+              className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:dark:border-amber-500/50 transition-all shadow-xs"
               title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{getUserDisplayName()}</p>
-              <p className="text-[11px] text-slate-400 dark:text-slate-500">{user?.correo}</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{getUserDisplayName()}</p>
+              <p className="text-[11px] text-slate-400 dark:text-slate-400">{user?.correo}</p>
             </div>
-            <div className="w-9 h-9 rounded-full bg-primary-600 text-white font-bold flex items-center justify-center text-sm shadow-sm">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-teal-600 to-emerald-500 text-white font-bold flex items-center justify-center text-sm shadow-md shadow-teal-500/25">
               {getUserDisplayName().charAt(0)}
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50 dark:bg-slate-950 transition-colors">
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50 dark:bg-[#0b0f19] transition-colors">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>

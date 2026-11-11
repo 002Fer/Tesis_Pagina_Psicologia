@@ -210,16 +210,24 @@ export const PatientAppointments = () => {
       {/* Encabezado y Acción Principal */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Mis Citas de Atención</h2>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20">
+              <Calendar className="w-3.5 h-3.5" /> Historial y Estado
+            </span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Mis Citas de Atención
+          </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Consulta tus citas programadas, historial y gestiona reprogramaciones o cancelaciones.
           </p>
         </div>
 
         <Link to="/paciente/profesionales">
-          <Button icon={Plus} variant="primary" className="shadow-sm">
+          <button className="inline-flex items-center gap-2 font-bold text-sm px-5 py-2.5 rounded-xl text-white bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 shadow-md shadow-teal-600/25 transition-all cursor-pointer">
+            <Plus className="w-4 h-4" />
             Agendar Nueva Cita
-          </Button>
+          </button>
         </Link>
       </div>
 
@@ -235,7 +243,7 @@ export const PatientAppointments = () => {
       )}
 
       {/* Barra de Búsqueda y Filtros */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm space-y-3">
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
           {/* Input de Búsqueda */}
           <div className="relative flex-1">
@@ -245,7 +253,7 @@ export const PatientAppointments = () => {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar por profesional, espacio, tipo o número de cita..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0b0f19] text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             {busqueda && (
               <button
@@ -265,7 +273,7 @@ export const PatientAppointments = () => {
                 type="date"
                 value={filtroFecha}
                 onChange={(e) => setFiltroFecha(e.target.value)}
-                className="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0b0f19] text-sm font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer"
               />
             </div>
 
@@ -273,7 +281,7 @@ export const PatientAppointments = () => {
               <button
                 type="button"
                 onClick={limpiarFiltros}
-                className="text-xs text-rose-600 dark:text-rose-400 hover:underline px-2 py-1 font-medium whitespace-nowrap"
+                className="text-xs text-rose-600 dark:text-rose-400 hover:underline px-2 py-1 font-bold whitespace-nowrap cursor-pointer"
               >
                 Limpiar filtros
               </button>
@@ -283,17 +291,17 @@ export const PatientAppointments = () => {
 
         {/* Píldoras de Estado */}
         <div className="flex items-center gap-2 overflow-x-auto pt-1 border-t border-slate-100 dark:border-slate-800">
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1">
             Estado:
           </span>
           {['TODAS', 'PROGRAMADA', 'REALIZADA', 'CANCELADA', 'REPROGRAMADA'].map((st) => (
             <button
               key={st}
               onClick={() => setFiltroEstado(st)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 filtroEstado === st
-                  ? 'bg-primary-600 text-white shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-sm'
+                  : 'bg-slate-100 dark:bg-[#0b0f19] text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-transparent dark:border-slate-800'
               }`}
             >
               {st}
@@ -319,7 +327,7 @@ export const PatientAppointments = () => {
             return (
               <div
                 key={cita.id_cita}
-                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md dark:shadow-black/40 transition-shadow flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-3">
@@ -327,14 +335,14 @@ export const PatientAppointments = () => {
                       <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                         Cita #{cita.id_cita} • {cita.tipo}
                       </span>
-                      <h4 className="text-base font-bold text-slate-800 dark:text-slate-100 capitalize mt-0.5">
+                      <h4 className="text-base font-bold text-slate-800 dark:text-white capitalize mt-0.5">
                         {fechaLabel}
                       </h4>
                     </div>
                     <Badge status={cita.estado} />
                   </div>
 
-                  <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#0b0f19] p-4 rounded-xl border border-slate-100 dark:border-slate-800/80">
                     <div className="flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
                       <span className="font-semibold text-slate-800 dark:text-slate-200">

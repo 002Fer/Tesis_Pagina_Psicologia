@@ -3,38 +3,38 @@ import React from 'react';
 export const Badge = ({ children, status = 'default', className = '' }) => {
   const statusStyles = {
     // Estados de Cita
-    PROGRAMADA: 'bg-blue-50 text-blue-700 border-blue-200',
-    REALIZADA: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    CANCELADA: 'bg-rose-50 text-rose-700 border-rose-200',
-    REPROGRAMADA: 'bg-amber-50 text-amber-700 border-amber-200',
-    INASISTENCIA: 'bg-purple-50 text-purple-700 border-purple-200',
+    PROGRAMADA: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800/80',
+    REALIZADA: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/80',
+    CANCELADA: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/80',
+    REPROGRAMADA: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/80',
+    INASISTENCIA: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800/80',
 
     // Estados de Paciente / General
-    ACTIVO: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    INACTIVO: 'bg-slate-100 text-slate-700 border-slate-200',
-    SOLICITANTE: 'bg-sky-50 text-sky-700 border-sky-200',
-    EN_ESPERA: 'bg-amber-50 text-amber-700 border-amber-200',
-    BAJA: 'bg-rose-50 text-rose-700 border-rose-200',
-    FINALIZADO: 'bg-slate-100 text-slate-800 border-slate-300',
+    ACTIVO: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/80',
+    INACTIVO: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+    SOLICITANTE: 'bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/80',
+    EN_ESPERA: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/80',
+    BAJA: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/80',
+    FINALIZADO: 'bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
 
     // Estados de Asistencia
-    ASISTIO: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    NO_ASISTIO: 'bg-rose-50 text-rose-700 border-rose-200',
+    ASISTIO: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/80',
+    NO_ASISTIO: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/80',
 
     // Espacio
-    DISPONIBLE: 'bg-teal-50 text-teal-700 border-teal-200',
-    NO_DISPONIBLE: 'bg-rose-50 text-rose-700 border-rose-200',
+    DISPONIBLE: 'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-800/80',
+    NO_DISPONIBLE: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/80',
 
-    default: 'bg-slate-50 text-slate-700 border-slate-200',
+    default: 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
   };
 
   const currentStyle = statusStyles[status] || statusStyles.default;
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${currentStyle} ${className}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${currentStyle} ${className}`}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-70"></span>
+      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-80"></span>
       {children || status}
     </span>
   );

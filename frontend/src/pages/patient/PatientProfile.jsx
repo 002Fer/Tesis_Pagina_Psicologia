@@ -104,8 +104,8 @@ export const PatientProfile = () => {
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800">Mi Perfil y Expediente</h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Mi Perfil y Expediente</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Actualiza tus datos de contacto y administra a tus personas de contacto o responsables.
           </p>
         </div>
@@ -125,7 +125,11 @@ export const PatientProfile = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Datos Personales */}
         <div className="md:col-span-2">
-          <Card title="Datos Personales" subtitle="Información registrada en tu expediente">
+          <Card
+            title="Datos Personales"
+            subtitle="Información registrada en tu expediente"
+            className="dark:bg-[#111827] dark:border-slate-800 shadow-md dark:shadow-black/40"
+          >
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
@@ -165,9 +169,18 @@ export const PatientProfile = () => {
               </div>
 
               <div className="flex justify-end pt-2">
-                <Button type="submit" loading={saving} icon={Save}>
-                  Guardar Cambios
-                </Button>
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="inline-flex items-center justify-center gap-2 font-bold text-sm px-5 py-2.5 rounded-xl text-white bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 shadow-md shadow-teal-600/25 transition-all disabled:opacity-50 cursor-pointer"
+                >
+                  {saving ? (
+                    <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  <span>Guardar Cambios</span>
+                </button>
               </div>
             </form>
           </Card>
@@ -175,19 +188,22 @@ export const PatientProfile = () => {
 
         {/* Resumen de Cuenta */}
         <div>
-          <Card title="Detalles de Cuenta">
-            <div className="space-y-3 text-xs text-slate-600">
+          <Card
+            title="Detalles de Cuenta"
+            className="dark:bg-[#111827] dark:border-slate-800 shadow-md dark:shadow-black/40"
+          >
+            <div className="space-y-3 text-xs text-slate-600 dark:text-slate-300">
               <div>
-                <span className="text-slate-400 block mb-0.5">Correo registrado</span>
-                <span className="font-semibold text-slate-800 text-sm">{user?.correo}</span>
+                <span className="text-slate-400 dark:text-slate-500 block mb-0.5">Correo registrado</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-100 text-sm">{user?.correo}</span>
               </div>
-              <div className="pt-2 border-t border-slate-100">
-                <span className="text-slate-400 block mb-0.5">Expediente #</span>
-                <span className="font-mono text-slate-800 font-bold">{paciente?.id_paciente}</span>
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span className="text-slate-400 dark:text-slate-500 block mb-0.5">Expediente #</span>
+                <span className="font-mono text-teal-600 dark:text-teal-400 font-bold">{paciente?.id_paciente}</span>
               </div>
-              <div className="pt-2 border-t border-slate-100">
-                <span className="text-slate-400 block mb-0.5">Fecha de registro</span>
-                <span className="font-medium text-slate-700">
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span className="text-slate-400 dark:text-slate-500 block mb-0.5">Fecha de registro</span>
+                <span className="font-medium text-slate-700 dark:text-slate-300">
                   {paciente?.fecha_registro ? new Date(paciente.fecha_registro).toLocaleDateString('es-ES') : '-'}
                 </span>
               </div>
@@ -200,6 +216,7 @@ export const PatientProfile = () => {
       <Card
         title="Contactos Responsables / Familiares"
         subtitle="Personas autorizadas o de apoyo para contacto administrativo"
+        className="dark:bg-[#111827] dark:border-slate-800 shadow-md dark:shadow-black/40"
         action={
           <Button size="sm" variant="secondary" onClick={() => setModalOpen(true)} icon={Plus}>
             Agregar Contacto
@@ -209,12 +226,12 @@ export const PatientProfile = () => {
         {paciente?.responsables && paciente.responsables.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {paciente.responsables.map((resp) => (
-              <div key={resp.id_responsable} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <div key={resp.id_responsable} className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-[#0b0f19]">
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-sm font-bold text-slate-800">
+                  <h4 className="text-sm font-bold text-slate-800 dark:text-white">
                     {resp.nombres} {resp.apellidos}
                   </h4>
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary-100 text-primary-700">
+                  <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60">
                     {resp.parentesco || 'Responsable'}
                   </span>
                 </div>
