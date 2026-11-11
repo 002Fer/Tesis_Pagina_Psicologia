@@ -132,7 +132,7 @@ export const LoginPage = () => {
           <p className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 text-center">
             Acceso Rápido para Pruebas (Demo)
           </p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               type="button"
               onClick={() => handleQuickLogin('admin@clinica.com', 'Admin123*')}
@@ -152,7 +152,15 @@ export const LoginPage = () => {
               onClick={() => handleQuickLogin('paciente@gmail.com', 'Paciente123*')}
               className="text-[11px] font-medium py-1.5 px-2 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
             >
-              Paciente
+              Paciente Adulto
+            </button>
+            <button
+              type="button"
+              onClick={() => handleQuickLogin('carmen.morales@gmail.com', 'Paciente123*')}
+              className="text-[11px] font-medium py-1.5 px-2 bg-teal-50 dark:bg-teal-950/50 hover:bg-teal-100 dark:hover:bg-teal-900/50 rounded-lg text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800/60 transition-colors font-semibold"
+              title="Cuenta de tutor legal con paciente menor de edad (Mateo López)"
+            >
+              Tutor (Menor)
             </button>
           </div>
         </div>

@@ -87,6 +87,20 @@ class PacientesService {
     `, [id]);
     paciente.vinculacion_actual = vincInfo.rows[0] || null;
 
+    // Traer plan de seguimiento activo si existe
+    if (paciente.vinculacion_actual) {
+      const planRes = await query(`
+        SELECT p.*,
+               (SELECT json_agg(h.*) FROM horario_seguimiento h WHERE h.id_plan_seguimiento = p.id_plan_seguimiento AND h.activo = TRUE) AS horarios
+        FROM plan_seguimiento p
+        WHERE p.id_vinculacion = $1 AND p.estado = 'ACTIVO'
+        LIMIT 1
+      `, [paciente.vinculacion_actual.id_vinculacion]);
+      paciente.plan_actual = planRes.rows[0] || null;
+    } else {
+      paciente.plan_actual = null;
+    }
+
     return paciente;
   }
 

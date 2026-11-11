@@ -21,4 +21,4 @@ INSERT INTO espacio (nombre, descripcion, ubicacion, estado) VALUES
 ('Consultorio 2', 'Consultorio para atención individual', 'Piso 1 - Ala Norte', 'DISPONIBLE'),
 ('Consultorio 3 (Infantil/Familiar)', 'Espacio acondicionado para atención de familias y dinámicas', 'Piso 1 - Ala Sur', 'DISPONIBLE'),
 ('Sala de Atención Virtual 1', 'Espacio equipado con terminal para teleatención', 'Piso 2 - Sala Telemática', 'DISPONIBLE')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (nombre) DO NOTHING;

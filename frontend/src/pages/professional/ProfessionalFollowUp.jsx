@@ -113,18 +113,22 @@ export const ProfessionalFollowUp = () => {
   };
 
   const handleOpenUpdateFrecuencia = (paciente) => {
-    // Si tiene plan activo
+    const planId = paciente.plan_actual?.id_plan_seguimiento || paciente.id_plan_seguimiento;
+    if (!planId) {
+      setNotification({ type: 'error', message: 'No se encontró un plan activo para este paciente.' });
+      return;
+    }
     setSelectedPlan({
       id_paciente: paciente.id_paciente,
-      id_plan: paciente.id_plan_seguimiento || paciente.vinculacion_actual?.id_vinculacion,
-      frecuenciaActual: paciente.frecuencia || 'SEMANAL',
+      id_plan: planId,
+      frecuenciaActual: paciente.plan_actual?.frecuencia || 'SEMANAL',
     });
-    setNuevaFrecuencia('QUINCENAL');
+    setNuevaFrecuencia(paciente.plan_actual?.frecuencia || 'QUINCENAL');
     setFrecuenciaModalOpen(true);
   };
 
   const handleConfirmUpdateFrecuencia = async () => {
-    if (!selectedPlan) return;
+    if (!selectedPlan?.id_plan) return;
     try {
       setActionLoading(true);
       const res = await followUpService.updateFrecuencia(selectedPlan.id_plan, {
@@ -132,7 +136,7 @@ export const ProfessionalFollowUp = () => {
       });
       if (res.success) {
         setFrecuenciaModalOpen(false);
-        setNotification({ type: 'success', message: `Frecuencia modificada a ${nuevaFrecuencia}.` });
+        setNotification({ type: 'success', message: `Frecuencia modificada exitosamente a ${nuevaFrecuencia}.` });
         fetchData();
       }
     } catch (err) {
@@ -143,17 +147,21 @@ export const ProfessionalFollowUp = () => {
   };
 
   const handleFinalizarSeguimiento = async (paciente) => {
+    const planId = paciente.plan_actual?.id_plan_seguimiento || paciente.id_plan_seguimiento;
+    if (!planId) {
+      setNotification({ type: 'error', message: 'El paciente no tiene un plan activo que finalizar.' });
+      return;
+    }
+
     if (!window.confirm(`¿Confirmas finalizar formalmente el proceso de atención para ${paciente.nombres} ${paciente.apellidos}?`)) {
       return;
     }
 
     try {
       setActionLoading(true);
-      // Obtener plan id si existe
-      const planId = paciente.id_plan_seguimiento || 1;
       const res = await followUpService.finalizar(planId);
       if (res.success) {
-        setNotification({ type: 'success', message: 'Seguimiento finalizado exitosamente.' });
+        setNotification({ type: 'success', message: 'Proceso de seguimiento finalizado exitosamente.' });
         fetchData();
       }
     } catch (err) {
@@ -164,22 +172,33 @@ export const ProfessionalFollowUp = () => {
   };
 
   const handleOpenGenerarCitas = (paciente) => {
-    setSelectedPlan(paciente);
+    const planId = paciente.plan_actual?.id_plan_seguimiento || paciente.id_plan_seguimiento;
+    if (!planId) {
+      setNotification({ type: 'error', message: 'Primero debe configurar un plan para generar citas periódicas.' });
+      return;
+    }
+    setSelectedPlan({
+      ...paciente,
+      id_plan_seguimiento: planId,
+    });
     setSemanasACrear('4');
     setGenerarModalOpen(true);
   };
 
   const handleConfirmGenerarCitas = async () => {
-    if (!selectedPlan) return;
+    if (!selectedPlan?.id_plan_seguimiento) return;
     try {
       setActionLoading(true);
-      const res = await followUpService.generarCitas(1, parseInt(semanasACrear, 10));
+      const res = await followUpService.generarCitas(selectedPlan.id_plan_seguimiento, parseInt(semanasACrear, 10));
       if (res.success) {
         setGenerarModalOpen(false);
-        setNotification({ type: 'success', message: `${res.data.length} citas recurrentes programadas con éxito.` });
+        setNotification({
+          type: 'success',
+          message: `${res.data?.length || 0} citas periódicas proyectadas y registradas con éxito en tu agenda.`,
+        });
       }
     } catch (err) {
-      setNotification({ type: 'error', message: err.message || 'Error al generar citas recurrentes.' });
+      setNotification({ type: 'error', message: err.message || 'Error al generar citas periódicas.' });
     } finally {
       setActionLoading(false);
     }
@@ -214,11 +233,16 @@ export const ProfessionalFollowUp = () => {
               className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-700/50 p-5 shadow-sm dark:shadow-none flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <h4 className="text-base font-bold text-slate-800 dark:text-slate-100">
                     {paciente.nombres} {paciente.apellidos}
                   </h4>
                   <Badge status={paciente.estado} />
+                  {paciente.plan_actual && (
+                    <span className="text-[11px] font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-800/60 px-2 py-0.5 rounded-full">
+                      Plan {paciente.plan_actual.frecuencia}
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Expediente #{paciente.id_paciente} • Vinculación:{' '}
@@ -233,30 +257,43 @@ export const ProfessionalFollowUp = () => {
               <div className="flex flex-wrap items-center gap-2">
                 {tieneVinculo ? (
                   <>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => handleOpenCreatePlan(paciente)}
-                      icon={Plus}
-                    >
-                      Configurar Plan
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => handleOpenUpdateFrecuencia(paciente)}
-                      icon={RefreshCw}
-                    >
-                      Modificar Frecuencia
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleFinalizarSeguimiento(paciente)}
-                      className="text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"
-                    >
-                      Finalizar Proceso
-                    </Button>
+                    {!paciente.plan_actual ? (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleOpenCreatePlan(paciente)}
+                        icon={Plus}
+                      >
+                        Configurar Plan
+                      </Button>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => handleOpenGenerarCitas(paciente)}
+                          icon={Calendar}
+                        >
+                          Generar Citas
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => handleOpenUpdateFrecuencia(paciente)}
+                          icon={RefreshCw}
+                        >
+                          Modificar Frecuencia
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleFinalizarSeguimiento(paciente)}
+                          className="text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                        >
+                          Finalizar Proceso
+                        </Button>
+                      </>
+                    )}
                   </>
                 ) : (
                   <span className="text-xs text-slate-400 dark:text-slate-500 italic">
@@ -355,6 +392,49 @@ export const ProfessionalFollowUp = () => {
             </Button>
             <Button onClick={handleConfirmUpdateFrecuencia} loading={actionLoading}>
               Actualizar Frecuencia
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal Generar Citas Periódicas */}
+      <Modal
+        isOpen={generarModalOpen}
+        onClose={() => setGenerarModalOpen(false)}
+        title="Proyectar y Generar Citas Periódicas"
+      >
+        <div className="space-y-4">
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            El sistema generará automáticamente las sesiones en tu agenda según la frecuencia y los días configurados en el plan terapéutico de{' '}
+            <strong>
+              {selectedPlan?.nombres} {selectedPlan?.apellidos}
+            </strong>.
+          </p>
+
+          <Select
+            id="semanasACrear"
+            label="Proyección de Semanas hacia Adelante"
+            value={semanasACrear}
+            onChange={(e) => setSemanasACrear(e.target.value)}
+            placeholder=""
+            options={[
+              { value: '2', label: 'Próximas 2 semanas' },
+              { value: '4', label: 'Próximas 4 semanas (1 mes recomendado)' },
+              { value: '8', label: 'Próximas 8 semanas (2 meses)' },
+              { value: '12', label: 'Próximas 12 semanas (3 meses)' },
+            ]}
+          />
+
+          <div className="p-3 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/60 text-xs text-teal-800 dark:text-teal-300">
+            <strong>Verificación automática:</strong> El sistema validará que los consultorios y tu agenda no presenten traslapes antes de fijar cada cita.
+          </div>
+
+          <div className="flex justify-end gap-3 pt-3">
+            <Button variant="secondary" onClick={() => setGenerarModalOpen(false)} disabled={actionLoading}>
+              Cancelar
+            </Button>
+            <Button onClick={handleConfirmGenerarCitas} loading={actionLoading} icon={Calendar}>
+              Generar Citas en Agenda
             </Button>
           </div>
         </div>
