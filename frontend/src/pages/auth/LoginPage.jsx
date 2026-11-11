@@ -6,6 +6,7 @@ import { HeartPulse, Mail, Lock, LogIn, Sun, Moon, ArrowLeft } from 'lucide-reac
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import { validateEmail } from '../../utils/email.utils';
 
 export const LoginPage = () => {
   const [correo, setCorreo] = useState('');
@@ -20,6 +21,13 @@ export const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    const emailVal = validateEmail(correo);
+    if (!emailVal.isValid) {
+      setError(emailVal.errorMessage);
+      return;
+    }
+
     setLoading(true);
 
     try {

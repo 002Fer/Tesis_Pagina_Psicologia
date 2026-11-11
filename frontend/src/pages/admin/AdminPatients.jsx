@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import patientService from '../../services/patientService';
 import professionalService from '../../services/professionalService';
 import followUpService from '../../services/followUpService';
-import { Users, Search, Plus, UserPlus, Phone, Calendar, HeartPulse } from 'lucide-react';
+import { Users, Search, Plus, UserPlus, Phone, Calendar, HeartPulse, ShieldAlert, ShieldCheck } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
@@ -11,6 +11,8 @@ import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
+import { calculateAge, isMinor } from '../../utils/date.utils';
+import { validateEmail } from '../../utils/email.utils';
 
 export const AdminPatients = () => {
   const [pacientes, setPacientes] = useState([]);
@@ -29,7 +31,17 @@ export const AdminPatients = () => {
     telefono: '',
     estado: 'SOLICITANTE',
   });
+  const [respData, setRespData] = useState({
+    nombres: '',
+    apellidos: '',
+    parentesco: 'Madre',
+    telefono: '',
+    correo: '',
+  });
   const [saving, setSaving] = useState(false);
+
+  const edadModal = calculateAge(formData.fecha_nacimiento);
+  const esMenorModal = isMinor(formData.fecha_nacimiento);
 
   // Modal Asignar Profesional
   const [assignModalOpen, setAssignModalOpen] = useState(false);
@@ -68,13 +80,36 @@ export const AdminPatients = () => {
 
   const handleCreatePatient = async (e) => {
     e.preventDefault();
+    if (esMenorModal) {
+      if (!respData.nombres.trim() || !respData.apellidos.trim()) {
+        setNotification({ type: 'error', message: 'Para pacientes menores de 18 años, debe registrar los nombres y apellidos del tutor legal.' });
+        return;
+      }
+      if (!respData.telefono.trim()) {
+        setNotification({ type: 'error', message: 'Debe ingresar el teléfono del tutor legal responsable.' });
+        return;
+      }
+      if (respData.correo.trim()) {
+        const emailVal = validateEmail(respData.correo);
+        if (!emailVal.isValid) {
+          setNotification({ type: 'error', message: `Correo del tutor inválido: ${emailVal.errorMessage}` });
+          return;
+        }
+      }
+    }
+
     try {
       setSaving(true);
       setNotification(null);
-      const res = await patientService.create(formData);
+      const payload = {
+        ...formData,
+        responsable: esMenorModal ? respData : null,
+      };
+      const res = await patientService.create(payload);
       if (res.success) {
         setCreateModalOpen(false);
         setFormData({ nombres: '', apellidos: '', fecha_nacimiento: '', telefono: '', estado: 'SOLICITANTE' });
+        setRespData({ nombres: '', apellidos: '', parentesco: 'Madre', telefono: '', correo: '' });
         setNotification({ type: 'success', message: 'Paciente registrado exitosamente.' });
         fetchData();
       }
@@ -173,42 +208,66 @@ export const AdminPatients = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700/50">
-              {pacientesFiltrados.map((pac) => (
-                <tr key={pac.id_paciente} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3 px-3">
-                    <p className="font-bold text-slate-800 dark:text-slate-100 text-sm">
-                      {pac.nombres} {pac.apellidos}
-                    </p>
-                    <p className="text-[11px] text-slate-400 dark:text-slate-500">Expediente #{pac.id_paciente}</p>
-                  </td>
-                  <td className="py-3 px-3">
-                    <p className="text-slate-700 dark:text-slate-200">{pac.telefono || 'Sin teléfono'}</p>
-                    <p className="text-[11px] text-slate-400 dark:text-slate-500">{pac.correo || 'Sin correo asociado'}</p>
-                  </td>
-                  <td className="py-3 px-3">
-                    <Badge status={pac.estado} />
-                  </td>
-                  <td className="py-3 px-3">
-                    {pac.prof_nombres ? (
-                      <span className="font-semibold text-slate-700 dark:text-slate-200">
-                        Lic. {pac.prof_nombres} {pac.prof_apellidos}
-                      </span>
-                    ) : (
-                      <span className="text-slate-400 dark:text-slate-500 italic">Sin asignar</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-3 text-right">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => handleOpenAssign(pac)}
-                      icon={HeartPulse}
-                    >
-                      Asignar Terapeuta
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+              {pacientesFiltrados.map((pac) => {
+                const edad = calculateAge(pac.fecha_nacimiento);
+                const menor = isMinor(pac.fecha_nacimiento);
+                const tutor = pac.responsable_principal;
+
+                return (
+                  <tr key={pac.id_paciente} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-3 px-3">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-bold text-slate-800 dark:text-slate-100 text-sm">
+                          {pac.nombres} {pac.apellidos}
+                        </p>
+                        {edad !== null && (
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              menor
+                                ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                            }`}
+                          >
+                            {menor ? `Menor (${edad} a.)` : `Mayor (${edad} a.)`}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">Expediente #{pac.id_paciente}</p>
+                    </td>
+                    <td className="py-3 px-3">
+                      <p className="text-slate-700 dark:text-slate-200">{pac.telefono || 'Sin teléfono'}</p>
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">{pac.correo || 'Sin correo asociado'}</p>
+                      {menor && tutor && (
+                        <p className="text-[10px] text-amber-700 dark:text-amber-400 font-medium mt-0.5">
+                          Tutor: {tutor.nombres} {tutor.apellidos} ({tutor.parentesco || 'Tutor'}) • Tel: {tutor.telefono || 'S/T'}
+                        </p>
+                      )}
+                    </td>
+                    <td className="py-3 px-3">
+                      <Badge status={pac.estado} />
+                    </td>
+                    <td className="py-3 px-3">
+                      {pac.prof_nombres ? (
+                        <span className="font-semibold text-slate-700 dark:text-slate-200">
+                          Lic. {pac.prof_nombres} {pac.prof_apellidos}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 dark:text-slate-500 italic">Sin asignar</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-3 text-right">
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleOpenAssign(pac)}
+                        icon={HeartPulse}
+                      >
+                        Asignar Terapeuta
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -249,6 +308,85 @@ export const AdminPatients = () => {
               onChange={(e) => setFormData({ ...formData, fecha_nacimiento: e.target.value })}
             />
           </div>
+
+          {/* Indicador de menor/mayor de edad */}
+          {formData.fecha_nacimiento && edadModal !== null && (
+            <div>
+              {esMenorModal ? (
+                <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-xs flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                  <span>
+                    Paciente <strong>Menor de Edad ({edadModal} años)</strong>. Se requieren datos del tutor legal.
+                  </span>
+                </div>
+              ) : (
+                <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Paciente Mayor de Edad ({edadModal} años)</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Sección Tutor Legal para Menor de Edad */}
+          {esMenorModal && (
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-amber-200 dark:border-amber-800/50 space-y-3">
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                Datos del Padre, Madre o Tutor Legal Responsable
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Input
+                  id="resp_nombres"
+                  label="Nombres del Tutor"
+                  required
+                  value={respData.nombres}
+                  onChange={(e) => setRespData({ ...respData, nombres: e.target.value })}
+                />
+                <Input
+                  id="resp_apellidos"
+                  label="Apellidos del Tutor"
+                  required
+                  value={respData.apellidos}
+                  onChange={(e) => setRespData({ ...respData, apellidos: e.target.value })}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Select
+                  id="resp_parentesco"
+                  label="Parentesco"
+                  value={respData.parentesco}
+                  onChange={(e) => setRespData({ ...respData, parentesco: e.target.value })}
+                  placeholder=""
+                  options={[
+                    { value: 'Madre', label: 'Madre' },
+                    { value: 'Padre', label: 'Padre' },
+                    { value: 'Tutor Legal', label: 'Tutor Legal' },
+                    { value: 'Abuelo/a', label: 'Abuelo/a' },
+                    { value: 'Tío/a', label: 'Tío/a' },
+                    { value: 'Otro', label: 'Otro' },
+                  ]}
+                />
+                <Input
+                  id="resp_telefono"
+                  label="Teléfono del Tutor"
+                  required
+                  value={respData.telefono}
+                  onChange={(e) => setRespData({ ...respData, telefono: e.target.value })}
+                />
+              </div>
+
+              <Input
+                id="resp_correo"
+                label="Correo del Tutor (Opcional)"
+                type="email"
+                value={respData.correo}
+                onChange={(e) => setRespData({ ...respData, correo: e.target.value })}
+              />
+            </div>
+          )}
 
           <Select
             id="estado"

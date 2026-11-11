@@ -12,6 +12,7 @@ import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
 import PasswordRequirements from '../../components/common/PasswordRequirements';
 import { validatePassword } from '../../utils/password.utils';
+import { validateEmail } from '../../utils/email.utils';
 
 export const AdminUsers = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -84,6 +85,12 @@ export const AdminUsers = () => {
   const handleCreateUser = async (e) => {
     e.preventDefault();
     setNotification(null);
+
+    const emailVal = validateEmail(formData.correo);
+    if (!emailVal.isValid) {
+      setNotification({ type: 'error', message: emailVal.errorMessage });
+      return;
+    }
 
     const val = validatePassword(formData.password);
     if (!val.isValid) {

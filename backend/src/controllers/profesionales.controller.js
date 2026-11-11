@@ -1,5 +1,6 @@
 const profesionalesService = require('../services/profesionales.service');
 const { successResponse, errorResponse } = require('../utils/response.utils');
+const { isValidEmail } = require('../utils/validator.utils');
 
 class ProfesionalesController {
   async getAll(req, res, next) {
@@ -27,6 +28,9 @@ class ProfesionalesController {
       const { correo, password, nombres, apellidos, telefono } = req.body;
       if (!correo || !nombres || !apellidos) {
         return errorResponse(res, 400, 'Campos requeridos: correo, nombres, apellidos');
+      }
+      if (!isValidEmail(correo)) {
+        return errorResponse(res, 400, 'El correo electrónico no tiene un formato válido.');
       }
       const data = await profesionalesService.create({ correo, password, nombres, apellidos, telefono });
       return successResponse(res, 201, 'Profesional creado exitosamente', data);

@@ -9,6 +9,8 @@ import Modal from '../../components/common/Modal';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
 import Badge from '../../components/common/Badge';
+import { calculateAge, isMinor } from '../../utils/date.utils';
+import { validateEmail } from '../../utils/email.utils';
 
 export const PatientProfile = () => {
   const { user } = useAuth();
@@ -82,6 +84,13 @@ export const PatientProfile = () => {
 
   const handleAddResponsable = async (e) => {
     e.preventDefault();
+    if (respData.correo) {
+      const emailVal = validateEmail(respData.correo);
+      if (!emailVal.isValid) {
+        setNotification({ type: 'error', message: `Correo de contacto inválido: ${emailVal.errorMessage}` });
+        return;
+      }
+    }
     try {
       setAddingResp(true);
       const res = await patientService.addResponsable(paciente.id_paciente, respData);
@@ -167,6 +176,21 @@ export const PatientProfile = () => {
                   icon={Calendar}
                 />
               </div>
+
+              {formData.fecha_nacimiento && (
+                <div className="text-xs">
+                  {isMinor(formData.fecha_nacimiento) ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 font-semibold">
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                      Paciente Menor de Edad ({calculateAge(formData.fecha_nacimiento)} años)
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 font-semibold">
+                      Paciente Mayor de Edad ({calculateAge(formData.fecha_nacimiento)} años)
+                    </span>
+                  )}
+                </div>
+              )}
 
               <div className="flex justify-end pt-2">
                 <button

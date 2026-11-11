@@ -5,7 +5,9 @@ class PacientesService {
     let sql = `
       SELECT p.id_paciente, p.id_usuario, p.nombres, p.apellidos, p.fecha_nacimiento,
              p.telefono, p.estado, p.fecha_registro, u.correo,
-             v.id_vinculacion, v.id_profesional, prof.nombres AS prof_nombres, prof.apellidos AS prof_apellidos
+             v.id_vinculacion, v.id_profesional, prof.nombres AS prof_nombres, prof.apellidos AS prof_apellidos,
+             (SELECT json_build_object('nombres', r.nombres, 'apellidos', r.apellidos, 'parentesco', r.parentesco, 'telefono', r.telefono, 'correo', r.correo)
+              FROM responsable r WHERE r.id_paciente = p.id_paciente LIMIT 1) AS responsable_principal
       FROM paciente p
       LEFT JOIN usuario u ON p.id_usuario = u.id_usuario
       LEFT JOIN vinculacion v ON v.id_paciente = p.id_paciente AND v.estado = 'ACTIVA'
@@ -88,7 +90,7 @@ class PacientesService {
     return paciente;
   }
 
-  async create({ nombres, apellidos, fecha_nacimiento, telefono, estado = 'SOLICITANTE' }, createdByUserId) {
+  async create({ nombres, apellidos, fecha_nacimiento, telefono, estado = 'SOLICITANTE', responsable = null }, createdByUserId) {
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
@@ -100,11 +102,34 @@ class PacientesService {
       const res = await client.query(insertSql, [nombres, apellidos, fecha_nacimiento || null, telefono || null, estado]);
       const nuevoPaciente = res.rows[0];
 
+      let respInfo = null;
+      if (responsable && responsable.nombres && responsable.apellidos) {
+        const respRes = await client.query(
+          `INSERT INTO responsable (id_paciente, nombres, apellidos, parentesco, telefono, correo)
+           VALUES ($1, $2, $3, $4, $5, $6)
+           RETURNING *`,
+          [
+            nuevoPaciente.id_paciente,
+            responsable.nombres.trim(),
+            responsable.apellidos.trim(),
+            responsable.parentesco ? responsable.parentesco.trim() : null,
+            responsable.telefono ? responsable.telefono.trim() : null,
+            responsable.correo ? responsable.correo.trim().toLowerCase() : null,
+          ]
+        );
+        respInfo = respRes.rows[0];
+        nuevoPaciente.responsable_principal = respInfo;
+      }
+
       // Historial
+      const descHistorial = respInfo
+        ? `Registro manual de paciente con tutor/responsable legal: ${respInfo.nombres} ${respInfo.apellidos} (${respInfo.parentesco || 'Responsable'})`
+        : 'Registro manual de paciente por administración';
+
       await client.query(
         `INSERT INTO historial_administrativo (id_paciente, id_usuario, tipo_evento, descripcion)
-         VALUES ($1, $2, 'PACIENTE_REGISTRADO', 'Registro manual de paciente por administración')`,
-        [nuevoPaciente.id_paciente, createdByUserId]
+         VALUES ($1, $2, 'PACIENTE_REGISTRADO', $3)`,
+        [nuevoPaciente.id_paciente, createdByUserId, descHistorial]
       );
 
       await client.query('COMMIT');

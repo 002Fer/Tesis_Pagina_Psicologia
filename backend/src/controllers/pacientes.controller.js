@@ -24,12 +24,12 @@ class PacientesController {
 
   async create(req, res, next) {
     try {
-      const { nombres, apellidos, fecha_nacimiento, telefono, estado } = req.body;
+      const { nombres, apellidos, fecha_nacimiento, telefono, estado, responsable } = req.body;
       if (!nombres || !apellidos) {
         return errorResponse(res, 400, 'Nombres y apellidos son requeridos.');
       }
       const data = await pacientesService.create(
-        { nombres, apellidos, fecha_nacimiento, telefono, estado },
+        { nombres, apellidos, fecha_nacimiento, telefono, estado, responsable },
         req.user.id_usuario
       );
       return successResponse(res, 201, 'Paciente registrado exitosamente', data);

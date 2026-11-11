@@ -3,7 +3,7 @@ const { query } = require('../config/database');
 const { signToken } = require('../utils/jwt.utils');
 
 class AuthService {
-  async register({ correo, password, nombres, apellidos, fecha_nacimiento, telefono, id_rol = 3 }) {
+  async register({ correo, password, nombres, apellidos, fecha_nacimiento, telefono, id_rol = 3, responsable = null }) {
     // Validar si el usuario ya existe
     const existing = await query('SELECT id_usuario FROM usuario WHERE correo = $1', [correo.toLowerCase().trim()]);
     if (existing.rowCount > 0) {
@@ -41,11 +41,35 @@ class AuthService {
         );
         perfil = pacRes.rows[0];
 
-        // Registrar en historial administrativo
+        // Si se proporciona responsable (obligatorio para menores de edad o contacto inicial)
+        let respInfo = null;
+        if (responsable && responsable.nombres && responsable.apellidos) {
+          const respRes = await client.query(
+            `INSERT INTO responsable (id_paciente, nombres, apellidos, parentesco, telefono, correo)
+             VALUES ($1, $2, $3, $4, $5, $6)
+             RETURNING *`,
+            [
+              perfil.id_paciente,
+              responsable.nombres.trim(),
+              responsable.apellidos.trim(),
+              responsable.parentesco ? responsable.parentesco.trim() : null,
+              responsable.telefono ? responsable.telefono.trim() : null,
+              responsable.correo ? responsable.correo.trim().toLowerCase() : null,
+            ]
+          );
+          respInfo = respRes.rows[0];
+          perfil.responsables = [respInfo];
+        }
+
+        // Registrar en historial administrativo detallando si es menor de edad con tutor
+        const descripcionHistorial = respInfo
+          ? `Registro de paciente con tutor/responsable legal: ${respInfo.nombres} ${respInfo.apellidos} (${respInfo.parentesco || 'Responsable'})`
+          : 'Registro de autoservicio de nuevo paciente';
+
         await client.query(
           `INSERT INTO historial_administrativo (id_paciente, id_usuario, tipo_evento, descripcion)
-           VALUES ($1, $2, 'PACIENTE_REGISTRADO', 'Registro de autoservicio de nuevo paciente')`,
-          [perfil.id_paciente, user.id_usuario]
+           VALUES ($1, $2, 'PACIENTE_REGISTRADO', $3)`,
+          [perfil.id_paciente, user.id_usuario, descripcionHistorial]
         );
       } else if (Number(id_rol) === 2) {
         // Si es PROFESIONAL (creado por admin normalmente)
