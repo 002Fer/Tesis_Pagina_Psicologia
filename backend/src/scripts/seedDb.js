@@ -399,6 +399,168 @@ async function seed() {
 
     console.log('[SEED] ✓ Vinculaciones iniciales establecidas.');
 
+    // ========================================================
+    // 6. PLANES DE SEGUIMIENTO Y HORARIOS INICIALES
+    // ========================================================
+    console.log('[SEED] Creando planes de seguimiento terapéutico...');
+    // Obtener las vinculaciones creadas
+    const vinc1 = (await client.query(`SELECT id_vinculacion FROM vinculacion WHERE id_paciente = $1 AND id_profesional = $2`, [pacIds[0], profIds[0]])).rows[0];
+    const vinc2 = (await client.query(`SELECT id_vinculacion FROM vinculacion WHERE id_paciente = $1 AND id_profesional = $2`, [pacIds[1], profIds[1]])).rows[0];
+    const vinc3 = (await client.query(`SELECT id_vinculacion FROM vinculacion WHERE id_paciente = $1 AND id_profesional = $2`, [pacIds[4], profIds[2]])).rows[0];
+
+    let plan1Id, plan3Id;
+
+    if (vinc1) {
+      let plan1Res = await client.query(`SELECT id_plan_seguimiento FROM plan_seguimiento WHERE id_vinculacion = $1`, [vinc1.id_vinculacion]);
+      if (plan1Res.rowCount === 0) {
+        plan1Res = await client.query(
+          `INSERT INTO plan_seguimiento (id_vinculacion, frecuencia, fecha_inicio, estado)
+           VALUES ($1, 'SEMANAL', CURRENT_DATE - INTERVAL '14 days', 'ACTIVO')
+           RETURNING id_plan_seguimiento`,
+          [vinc1.id_vinculacion]
+        );
+        plan1Id = plan1Res.rows[0].id_plan_seguimiento;
+        await client.query(
+          `INSERT INTO horario_seguimiento (id_plan_seguimiento, dia_semana, hora_inicio, duracion_minutos, activo)
+           VALUES ($1, 1, '09:00:00', 60, TRUE), ($1, 3, '10:00:00', 60, TRUE)`,
+          [plan1Id]
+        );
+      } else {
+        plan1Id = plan1Res.rows[0].id_plan_seguimiento;
+      }
+    }
+
+    if (vinc3) {
+      let plan3Res = await client.query(`SELECT id_plan_seguimiento FROM plan_seguimiento WHERE id_vinculacion = $1`, [vinc3.id_vinculacion]);
+      if (plan3Res.rowCount === 0) {
+        plan3Res = await client.query(
+          `INSERT INTO plan_seguimiento (id_vinculacion, frecuencia, fecha_inicio, estado)
+           VALUES ($1, 'QUINCENAL', CURRENT_DATE - INTERVAL '7 days', 'ACTIVO')
+           RETURNING id_plan_seguimiento`,
+          [vinc3.id_vinculacion]
+        );
+        plan3Id = plan3Res.rows[0].id_plan_seguimiento;
+        await client.query(
+          `INSERT INTO horario_seguimiento (id_plan_seguimiento, dia_semana, hora_inicio, duracion_minutos, activo)
+           VALUES ($1, 2, '15:00:00', 60, TRUE)`,
+          [plan3Id]
+        );
+      } else {
+        plan3Id = plan3Res.rows[0].id_plan_seguimiento;
+      }
+    }
+    console.log('[SEED] ✓ Planes de seguimiento configurados.');
+
+    // ========================================================
+    // 7. CITAS PROGRAMADAS Y ASISTENCIAS DE DEMOSTRACIÓN
+    // ========================================================
+    console.log('[SEED] Configurando citas de prueba (hoy, próximas y pasadas)...');
+    const espRes = await client.query('SELECT id_espacio, nombre FROM espacio ORDER BY id_espacio ASC');
+    const esp1 = espRes.rows[0]?.id_espacio;
+    const esp2 = espRes.rows[1]?.id_espacio;
+    const esp3 = espRes.rows[2]?.id_espacio;
+
+    // Obtener id_usuario de profesional 1 para registrar asistencias
+    const prof1UserRes = await client.query('SELECT id_usuario FROM profesional WHERE id_profesional = $1', [profIds[0]]);
+    const prof1UserId = prof1UserRes.rows[0]?.id_usuario || adminId;
+
+    // Cita 1: HOY a las 10:00 AM - Dr. Carlos Pérez con Ana Martínez (PROGRAMADA - Lista para registrar asistencia)
+    const checkCitaHoy1 = await client.query(
+      `SELECT id_cita FROM cita WHERE id_profesional = $1 AND id_paciente = $2 AND estado = 'PROGRAMADA' AND DATE(fecha_hora_inicio) = CURRENT_DATE`,
+      [profIds[0], pacIds[0]]
+    );
+    if (checkCitaHoy1.rowCount === 0) {
+      await client.query(
+        `INSERT INTO cita (id_paciente, id_profesional, id_espacio, id_plan_seguimiento, creado_por, fecha_hora_inicio, fecha_hora_fin, tipo, estado)
+         VALUES ($1, $2, $3, $4, $5, 
+                 CURRENT_DATE + TIME '10:00:00', 
+                 CURRENT_DATE + TIME '11:00:00', 
+                 'SEGUIMIENTO', 'PROGRAMADA')`,
+        [pacIds[0], profIds[0], esp1, plan1Id, adminId]
+      );
+    }
+
+    // Cita 2: HOY a las 16:00 PM - Dr. Alejandro Méndez con Mateo López (menor con tutor) (PROGRAMADA)
+    const checkCitaHoy2 = await client.query(
+      `SELECT id_cita FROM cita WHERE id_profesional = $1 AND id_paciente = $2 AND estado = 'PROGRAMADA' AND DATE(fecha_hora_inicio) = CURRENT_DATE`,
+      [profIds[2], pacIds[4]]
+    );
+    if (checkCitaHoy2.rowCount === 0) {
+      await client.query(
+        `INSERT INTO cita (id_paciente, id_profesional, id_espacio, id_plan_seguimiento, creado_por, fecha_hora_inicio, fecha_hora_fin, tipo, estado)
+         VALUES ($1, $2, $3, $4, $5, 
+                 CURRENT_DATE + TIME '16:00:00', 
+                 CURRENT_DATE + TIME '17:00:00', 
+                 'SEGUIMIENTO', 'PROGRAMADA')`,
+        [pacIds[4], profIds[2], esp3, plan3Id, adminId]
+      );
+    }
+
+    // Cita 3: MAÑANA a las 11:00 AM - Dra. María Elena Vásquez con Diego Ramos (PROGRAMADA)
+    const checkCitaManana = await client.query(
+      `SELECT id_cita FROM cita WHERE id_profesional = $1 AND id_paciente = $2 AND estado = 'PROGRAMADA' AND DATE(fecha_hora_inicio) = CURRENT_DATE + INTERVAL '1 day'`,
+      [profIds[1], pacIds[1]]
+    );
+    if (checkCitaManana.rowCount === 0) {
+      await client.query(
+        `INSERT INTO cita (id_paciente, id_profesional, id_espacio, creado_por, fecha_hora_inicio, fecha_hora_fin, tipo, estado)
+         VALUES ($1, $2, $3, $4, 
+                 CURRENT_DATE + INTERVAL '1 day' + TIME '11:00:00', 
+                 CURRENT_DATE + INTERVAL '1 day' + TIME '12:00:00', 
+                 'INICIAL', 'PROGRAMADA')`,
+        [pacIds[1], profIds[1], esp2, adminId]
+      );
+    }
+
+    // Cita 4: PASADA (hace 3 días) - Dr. Carlos Pérez con Ana Martínez (REALIZADA con ASISTENCIA registrada)
+    const checkCitaPasada1 = await client.query(
+      `SELECT id_cita FROM cita WHERE id_profesional = $1 AND id_paciente = $2 AND estado = 'REALIZADA'`,
+      [profIds[0], pacIds[0]]
+    );
+    if (checkCitaPasada1.rowCount === 0) {
+      const cRes = await client.query(
+        `INSERT INTO cita (id_paciente, id_profesional, id_espacio, id_plan_seguimiento, creado_por, fecha_hora_inicio, fecha_hora_fin, tipo, estado)
+         VALUES ($1, $2, $3, $4, $5, 
+                 CURRENT_DATE - INTERVAL '3 days' + TIME '09:00:00', 
+                 CURRENT_DATE - INTERVAL '3 days' + TIME '10:00:00', 
+                 'SEGUIMIENTO', 'REALIZADA')
+         RETURNING id_cita`,
+        [pacIds[0], profIds[0], esp1, plan1Id, adminId]
+      );
+      const cId = cRes.rows[0].id_cita;
+      await client.query(
+        `INSERT INTO asistencia (id_cita, estado, tipo_inasistencia, registrado_por)
+         VALUES ($1, 'ASISTIO', NULL, $2)
+         ON CONFLICT (id_cita) DO NOTHING`,
+        [cId, prof1UserId]
+      );
+    }
+
+    // Cita 5: PASADA (hace 5 días) - Dr. Carlos Pérez con Sofía Castillo (INASISTENCIA JUSTIFICADA)
+    const checkCitaPasada2 = await client.query(
+      `SELECT id_cita FROM cita WHERE id_profesional = $1 AND id_paciente = $2 AND estado = 'INASISTENCIA'`,
+      [profIds[0], pacIds[2]]
+    );
+    if (checkCitaPasada2.rowCount === 0) {
+      const cRes2 = await client.query(
+        `INSERT INTO cita (id_paciente, id_profesional, id_espacio, creado_por, fecha_hora_inicio, fecha_hora_fin, tipo, estado)
+         VALUES ($1, $2, $3, $4, 
+                 CURRENT_DATE - INTERVAL '5 days' + TIME '14:00:00', 
+                 CURRENT_DATE - INTERVAL '5 days' + TIME '15:00:00', 
+                 'INICIAL', 'INASISTENCIA')
+         RETURNING id_cita`,
+        [pacIds[2], profIds[0], esp1, adminId]
+      );
+      const cId2 = cRes2.rows[0].id_cita;
+      await client.query(
+        `INSERT INTO asistencia (id_cita, estado, tipo_inasistencia, registrado_por)
+         VALUES ($1, 'NO_ASISTIO', 'JUSTIFICADA', $2)
+         ON CONFLICT (id_cita) DO NOTHING`,
+        [cId2, prof1UserId]
+      );
+    }
+    console.log('[SEED] ✓ Citas y asistencias de demostración registradas.');
+
     await client.query('COMMIT');
     console.log('========================================================');
     console.log('[SEED] ¡BASE DE DATOS INICIALIZADA EXITOSAMENTE!');
