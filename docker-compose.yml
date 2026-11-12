@@ -1,23 +1,64 @@
 services:
   postgres:
-    image: postgres:16
-    container_name: psicologia_postgres
+    image: postgres:16-alpine
+    container_name: clinica_postgres
+    restart: always
     environment:
       POSTGRES_DB: ${DB_NAME:-psicologia_db}
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres123}
-    ports:
-      - "${DB_PORT:-5433}:5432"
     volumes:
-      - psicologia_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
       - ./database/seeds.sql:/docker-entrypoint-initdb.d/02_seeds.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d psicologia_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-psicologia_db}"]
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    networks:
+      - clinica_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: clinica_backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-psicologia_db}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres123}
+      JWT_SECRET: ${JWT_SECRET:-super_secret_jwt_key_tesis_psicologia_2026_segura}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      CLIENT_ORIGIN: "*"
+    networks:
+      - clinica_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: clinica_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "${PORT_HTTP:-80}:80"
+    networks:
+      - clinica_net
 
 volumes:
-  psicologia_data:
+  postgres_data:
+    driver: local
+
+networks:
+  clinica_net:
+    driver: bridge
